@@ -3,6 +3,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, MultipleFileField, FileField, RadioField, IntegerField, SelectMultipleField, BooleanField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
+from datetime import datetime, timedelta
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators = [DataRequired()])
@@ -20,7 +21,13 @@ class RegistrationForm(FlaskForm):
 
     def validate_password(self, password):
         if password.data.islower() or password.data.isupper():
-            raise ValidationError('Password must contain both upper and lower case words.')
+            raise ValidationError('Password must contain both upper and lower case letters.')
+        elif any(char.isdigit() for char in password.data) == False:
+            raise ValidationError('Password must contain at least one number.')
+    
+    def validate_date_of_birth(self, date_of_birth):
+        if datetime.now() - date_of_birth.data < 0:
+            raise ValidationError('Date of birth cannot be from after todays date.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
