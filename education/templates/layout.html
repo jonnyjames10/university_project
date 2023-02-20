@@ -13,9 +13,9 @@
                 <div><a href="{{ url_for('home') }}">Home</a></div>&nbsp
                 <div><a href="{{ url_for('about') }}">About Us</a></div>
                 <div> </div>
-                <div>Primary School</div>
-                <div>GCSE</div>
-                <div>A-Level</div>
+                <div><a href="{{ url_for('primary_school') }}">Primary School</a></div>
+                <div><a href="{{ url_for('gcse') }}">GCSE</a></div>
+                <div><a href="{{ url_for('a_level') }}">A-Level</a></div>
             </div>
             <div class="navbar-right">
             {% if current_user.is_authenticated %}

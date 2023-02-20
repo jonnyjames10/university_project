@@ -45,3 +45,15 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+@app.route("/primary_school")
+def primary_school():
+    return render_template('primary_school.html')
+
+@app.route("/gcse")
+def gcse():
+    return render_template('gcse.html')
+
+@app.route("/a_level")
+def a_level():
+    return render_template('a_level.html')
