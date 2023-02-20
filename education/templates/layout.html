@@ -7,11 +7,30 @@
 
 <body>
     <div id="header">
-        <a href="{{ url_for('home') }}">Home</a>&nbsp
-        <a href="{{ url_for('about') }}">About Us</a>
+        <ul class="navbar">
+            <a href="{{ url_for('home') }}">Home</a>&nbsp
+            <a href="{{ url_for('about') }}">About Us</a>
+            {% if current_user.is_authenticated %}
+                <li class="navbar_item"><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li class="navbar_item"><a href="{{ url_for('login') }}">Login</a></li>
+                <li class="navbar_item"><a href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+        </ul>
     </div>
 
     <div class="content">
+        <div>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class="flashes">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </div>
         {% block content %}
         {% endblock %}
     </div>

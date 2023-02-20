@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form method="POST" action="">
+        {{ form.csrf_token }}
+        {{ form.email.label }} {{ form.email }}
+        {{ form.password.label }} {{ form.password }}
+        <input type="submit" value="Register">
+    </form>
+{% endblock content %}
