@@ -1,12 +1,45 @@
 {% extends "layout.html" %}
 {% block content %}
-    <form method="POST" action="">
-        {{ form.csrf_token }}
-        {{ form.name.label }} {{ form.name }} {% for error in form.name.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %}
-        {{ form.email.label }} {{ form.email }} {% for error in form.email.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %}
-        {{ form.password.label }} {{ form.password }} {% for error in form.password.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %}
-        {{ form.confirm_password.label }} {{ form.confirm_password }} {% for error in form.confirm_password.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %}
-        {{ form.date_of_birth.label }} {{ form.date_of_birth }} {% for error in form.date_of_birth.errors %} <span style="color: red;">[{{ error }}]</span> {% endfor %}
-        <input type="submit" value="Register">
-    </form>
+    <div class="form f_register">
+        <div class="title">Welcome</div>
+        <div class="subtitle">Let's create your account!</div>
+        <form method="POST" action="">
+            {{ form.csrf_token }}
+            <div class="input-container ic1">
+                {{ form.first_name(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.first_name.label(class_="placeholder") }}
+            </div>
+            <div class="input-container ic2">
+                {{ form.last_name(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.last_name.label(class_="placeholder") }}
+            </div>
+            <div class="input-container ic2">
+                {{ form.email(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.email.label(class_="placeholder") }}
+            </div>
+            <div class="input-container ic2">
+                {{ form.password(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.password.label(class_="placeholder") }}
+            </div>
+            <div class="input-container ic2">
+                {{ form.confirm_password(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.confirm_password.label(class_="placeholder") }}
+            </div>
+            <div class="input-container ic2">
+                {{ form.date_of_birth(class_="input", placeholder=" ") }}
+                <div class="cut"></div>
+                {{ form.date_of_birth.label(class_="placeholder") }}
+            </div>
+            <button type="text" class="submit">Register</button>
+        </form>
+        <br>
+        <div class="login"><a href="{{ url_for('login') }}">Log In</a></div>
+        <br>
+        <div class="subtitle">Forgotten your password?</div>
+    </div>
 {% endblock content %}

@@ -1,22 +1,32 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>Website</title>
+    <title>Cyber Security Educational Portal</title>
+    <link href="//db.onlinewebfonts.com/c/d7e8a95865396cddca89b00080d2cba6?family=SoDo+Sans+SemiBold" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <div id="header">
-        <ul class="navbar">
-            <a href="{{ url_for('home') }}">Home</a>&nbsp
-            <a href="{{ url_for('about') }}">About Us</a>
+        <div class="navbar">
+            <div class="navbar-left">
+                <div><a href="{{ url_for('home') }}">Home</a></div>&nbsp
+                <div><a href="{{ url_for('about') }}">About Us</a></div>
+                <div> </div>
+                <div>Primary School</div>
+                <div>GCSE</div>
+                <div>A-Level</div>
+            </div>
+            <div class="navbar-right">
             {% if current_user.is_authenticated %}
-                <li class="navbar_item"><a href="{{ url_for('logout') }}">Logout</a></li>
+                <p>Welcome, {{ current_user.first_name }}</p>
+                <div class="navbar_item"><a href="{{ url_for('logout') }}">Logout</a></div>
             {% else %}
-                <li class="navbar_item"><a href="{{ url_for('login') }}">Login</a></li>
-                <li class="navbar_item"><a href="{{ url_for('register') }}">Register</a></li>
+                <div class="login"><a href="{{ url_for('login') }}">Login</a></div>
+                <div class="register"><a href="{{ url_for('register') }}">Register</a></div>
             {% endif %}
-        </ul>
+            </div>
+        </div>
     </div>
 
     <div class="content">
@@ -31,8 +41,10 @@
                 {% endif %}
             {% endwith %}
         </div>
+        <br>
         {% block content %}
         {% endblock %}
+        <br>
     </div>
 </body>
 </html>

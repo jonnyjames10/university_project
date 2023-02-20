@@ -1,9 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
+
+<div class="form f_login">
+    <div class="title">Welcome</div>
+    <div class="subtitle">Let's create your account!</div>
     <form method="POST" action="">
         {{ form.csrf_token }}
-        {{ form.email.label }} {{ form.email }}
-        {{ form.password.label }} {{ form.password }}
-        <input type="submit" value="Register">
+        <div class="input-container ic1">
+            {{ form.email(class_="input", placeholder=" ") }}
+            <div class="cut"></div>
+            {{ form.email.label(class_="placeholder") }}
+        </div>
+        <div class="input-container ic2">
+            {{ form.password(class_="input", placeholder=" ") }}
+            <div class="cut"></div>
+            {{ form.password.label(class_="placeholder") }}
+        </div>
+        <button type="text" class="submit">Log In</button>
     </form>
+    <br>
+    <div class="register"><a href="{{ url_for('register') }}">Register</a></div>
+    <br>
+    <div class="subtitle">Forgotten your password?</div>
+</div>
 {% endblock content %}

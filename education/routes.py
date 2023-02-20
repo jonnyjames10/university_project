@@ -17,9 +17,9 @@ def about():
 def register():
     form = RegistrationForm()
     if request.method == 'POST':
-        user = User(name = form.name.data,
-            email = form.email.data, password = form.password.data,
-            date_of_birth = form.date_of_birth.data)
+        user = User(first_name = form.first_name.data,
+            last_name = form.last_name.data, email = form.email.data,
+            password = form.password.data, date_of_birth = form.date_of_birth.data)
         db.session.add(user)
         db.session.commit()
 
