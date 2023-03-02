@@ -56,7 +56,9 @@
             <button type="text" class="submit">Register</button>
         </form>
         <br>
-        <div class="login"><a href="{{ url_for('login') }}">Log In</a></div>
+        <form action="{{ url_for('login') }}">
+            <button class="login">Log in</button>
+        </form>
         <br>
         <div class="subtitle">Forgotten your password?</div>
     </div>

@@ -19,7 +19,9 @@
         <button type="text" class="submit">Log In</button>
     </form>
     <br>
-    <div class="register"><a href="{{ url_for('register') }}">Register</a></div>
+    <form action="{{ url_for('register') }}">
+        <button class="register">Register</button>
+    </form>
     <br>
     <div class="subtitle">Forgotten your password?</div>
 </div>
