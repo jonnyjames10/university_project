@@ -247,3 +247,39 @@ td, th {
 th {
     font-weight: bold;
 }
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 31vw 31vw 31vw;
+    column-gap: 3%;
+    row-gap: 8%;
+}
+
+.grid-item {
+    margin: auto;
+    width: 22vw;
+    height: 26vh;
+    border: solid;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    background-position: center center;
+    background-size: cover;
+}
+
+.grid-item:hover {
+    filter: blur(8px);
+    transition: 0.5s ease-in-out;
+}
+
+.cyberbullying {
+    background-image: url('images/cyberbullying.png');
+}
+
+.phishing {
+    background-image: url('images/phishing.png');
+}
+
+.suspiciouslink {
+    background-image: url('images/suspiciousLink.png');
+}

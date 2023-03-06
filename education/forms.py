@@ -12,6 +12,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired(), Length(min=8, message='Password must be at least 8 characters long')])
     confirm_password = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password', message='Passwords do not match')])
     date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    school = StringField('School Name', validators=[DataRequired()])
     submit = SubmitField('REGISTER')
 
     def validate_email(self,email):
