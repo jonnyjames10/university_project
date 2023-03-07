@@ -1,4 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Welcome to The Cyber Security Education Online Portal</h1>
+
+    <h3>Leaderboard</h3>
+    <div id="leaderboard">
+        {% for user in users %}
+        <div id="user">
+            <div class="name"><p>{{user.first_name}}</p></div>
+            <div class="score"><p>{{ user.points }}</p></div>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

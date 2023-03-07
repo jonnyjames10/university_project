@@ -7,7 +7,8 @@ from flask_login import login_user, logout_user, login_required, current_user
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    users = User.query.order_by(User.points.desc()).limit(5)
+    return render_template('home.html', users=users)
 
 @app.route("/about")
 def about():
