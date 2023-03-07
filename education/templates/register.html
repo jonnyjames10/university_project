@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
+    <br>
     <div class="form f_register">
         <div class="title">Welcome</div>
         <div class="subtitle">Let's create your account!</div>
@@ -42,6 +43,14 @@
                 <div class="cut" style="width:120px"></div>
                 {{ form.confirm_password.label(class_="placeholder") }}
                 {% for error in form.confirm_password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div class="input-container ic2">
+                {{ form.school(class_="input", placeholder=" ") }}
+                <div class="cut" style="width:92px"></div>
+                {{ form.school.label(class_="placeholder") }}
+                {% for error in form.school.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </div>

@@ -51,6 +51,18 @@ def logout():
 def primary_school():
     return render_template('primary_school.html')
 
+@app.route("/primary_school/cyberbullying")
+def cyberbullying():
+    return render_template('primary_school/cyberbullying.html')
+
+@app.route("/primary_school/phishing")
+def phishing():
+    return render_template('primary_school/phishing.html')
+
+@app.route("/primary_school/suspicious_links")
+def suspicious_links():
+    return render_template('primary_school/suspicious_links.html')
+
 @app.route("/gcse")
 def gcse():
     return render_template('gcse.html')

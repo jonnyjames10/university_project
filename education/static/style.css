@@ -267,10 +267,10 @@ th {
     background-size: cover;
 }
 
-.grid-item:hover {
+/* .grid-item:hover {
     filter: blur(8px);
     transition: 0.5s ease-in-out;
-}
+} */
 
 .cyberbullying {
     background-image: url('images/cyberbullying.png');
@@ -282,4 +282,38 @@ th {
 
 .suspiciouslink {
     background-image: url('images/suspiciousLink.png');
+}
+
+.topic_navbar {
+    overflow: hidden;
+    position: fixed;
+    left: 0;
+    background-color: #000878;
+    position: fixed;
+    width: 100%;
+}
+    
+.topic_navbar a {
+    width: 25%;
+    height: 25px;
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    text-decoration: none;
+    font-size: 17px;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.topic_navbar a:hover{
+    background-color: rgb(22, 142, 255);
+    transition: 0.2s;
+    opacity: 0.6;
+}
+
+.main {
+    padding: 16px;
+    margin-top: 5px;
 }
