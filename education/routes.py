@@ -54,7 +54,9 @@ def primary_school():
 
 @app.route("/primary_school/cyberbullying")
 def cyberbullying():
-    return render_template('primary_school/cyberbullying.html')
+    with open("education/static/notes/cyberbullying.txt", "r") as text:
+        notes = text.read()
+    return render_template('primary_school/cyberbullying.html', notes=notes)
 
 @app.route("/primary_school/phishing")
 def phishing():
@@ -67,6 +69,12 @@ def suspicious_links():
 @app.route("/gcse")
 def gcse():
     return render_template('gcse.html')
+
+@app.route("/gcse/databases")
+def databases():
+    with open("education/static/notes/databases.txt", "r") as text:
+        notes = text.read()
+    return render_template('gcse/databases.html', notes=notes)
 
 @app.route("/a_level")
 def a_level():
