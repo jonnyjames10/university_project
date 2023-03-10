@@ -1,22 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
     <script src="../../static/topics.js" type="module"></script>
-
     <div class="topic_navbar">
-        <button class="button_active">Notes</button>
+        <button>Notes</button>
         <button>Video</button>
         <button>Game</button>
         <button>Test</button>
     </div>
     <div class="main">
-        <br>
         <h1>Cyberbullying</h1>
         <div id="content">
             <div class="content_inside">
                 <pre>{{ notes }}</pre>
             </div>
             <div class="content_inside">
-                video goes here
+                <video controls>
+                    <source src={{ url_for('static', filename="videos/demo.mp4") }} type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
             </div>
             <div class="content_inside">
                 game goes here
@@ -26,5 +27,4 @@
             </div>
         </div>
     </div>
-
 {% endblock content %}

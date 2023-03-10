@@ -3,6 +3,7 @@ from education import app, db
 from education.models import User, RoleMember
 from education.forms import RegistrationForm, LoginForm
 from flask_login import login_user, logout_user, login_required, current_user
+import cv2
 
 @app.route("/")
 @app.route("/home")

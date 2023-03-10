@@ -24,6 +24,11 @@ pre {
         Arial, sans-serif;
 }
 
+button {
+    font-family: "SoDo Sans SemiBold", Helvetica Neue, Helvetica,
+        Arial, sans-serif;
+}
+
 a:link {
     text-decoration: none;
 }
@@ -311,15 +316,14 @@ th {
 
 .topic_navbar {
     overflow: hidden;
-    position: fixed;
     left: 0;
-    position: fixed;
     width: 100%;
+    margin-top: 5px;
 }
     
 .topic_navbar button {
     width: 25%;
-    height: 25px;
+    height: 45px;
     float: left;
     color: #4891d4;
     background-color: #000878;
@@ -331,6 +335,7 @@ th {
     justify-content: center;
     align-items: center;
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .topic_navbar button:hover {
@@ -390,10 +395,6 @@ th {
     background-color: #2428F9;
 }
 
-.topic_navbar button {
-    cursor: pointer;
-}
-
 .content_inside {
     display: none;
     border: 1px solid white;
@@ -404,4 +405,10 @@ th {
   
 .content_inside_active {
     display: block;
+}
+
+video {
+    display: block;
+    margin: 0 auto;
+    width: 75vw;
 }

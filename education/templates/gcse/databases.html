@@ -9,14 +9,16 @@
         <button>Test</button>
     </div>
     <div class="main">
-        <br>
         <h1>Databases</h1>
         <div id="content">
             <div class="content_inside">
-                {{ notes }}
+                <pre>{{ notes }}</pre>
             </div>
             <div class="content_inside">
-                video goes here
+                <video controls>
+                    <source src={{ url_for('static', filename="videos/demo.mp4") }} type="video/mp4">
+                Your browser does not support the video tag.
+                </video>
             </div>
             <div class="content_inside">
                 game goes here
