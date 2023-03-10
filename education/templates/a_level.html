@@ -2,22 +2,10 @@
 {% block content %}
     <h1>A-Level Topics</h1>
     <h3>Have some descriptive text here</h3>
-
-    <table>
-        <tr>
-            <th>Topic name</th>
-            <th>Description</th>
-            <th>Link</th>
-        </tr>
-        <tr>
-            <td>Encryption</td>
-            <td>Desc goes here</td>
-            <td>Link goes here</td>
-        </tr>
-        <tr>
-            <td>IP Addressing</td>
-            <td>Desc goes here</td>
-            <td>Link goes here</td>
-        </tr>
-    </table>
+    <br>
+    <div class="grid-container">
+        <a href="{{ url_for('cyberbullying') }}"><div class="grid-item cyberbullying">Cyberbullying</div></a>
+        <a href="{{ url_for('phishing') }}"><div class="grid-item phishing">Phishing</div></a>
+        <a href="{{ url_for('suspicious_links') }}"><div class="grid-item suspiciouslink">Suspicious Links</div></a>
+    </div>
 {% endblock content %}

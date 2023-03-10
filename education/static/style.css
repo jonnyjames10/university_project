@@ -292,16 +292,16 @@ th {
     overflow: hidden;
     position: fixed;
     left: 0;
-    background-color: #000878;
     position: fixed;
     width: 100%;
 }
     
-.topic_navbar a {
+.topic_navbar button {
     width: 25%;
     height: 25px;
     float: left;
-    color: #f2f2f2;
+    color: #4891d4;
+    background-color: #000878;
     text-align: center;
     text-decoration: none;
     font-size: 17px;
@@ -311,7 +311,7 @@ th {
     align-items: center;
 }
 
-.topic_navbar a:hover{
+.topic_navbar button:hover{
     background-color: rgb(22, 142, 255);
     transition: 0.2s;
     opacity: 0.6;
@@ -365,4 +365,20 @@ th {
 
 .leaderboard tr:nth-child(n+5) {
     background-color: #2428F9;
+}
+
+.topic_navbar button {
+    cursor: pointer;
+}
+
+.content_inside {
+    display: none;
+    border: 1px solid white;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+  
+.content_inside_active {
+    display: block;
 }
