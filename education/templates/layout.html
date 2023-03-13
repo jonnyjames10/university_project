@@ -19,7 +19,16 @@
             <div class="navbar-right">
             {% if current_user.is_authenticated %}
                 <p>Welcome, {{ current_user.first_name }} | Points: {{ current_user.points }}</p>
-                <div class="navbar_item"><a href="{{ url_for('logout') }}">Logout</a></div>
+                <div class="navbar_item">
+                    <form action="{{ url_for('profile') }}">
+                        <button class="profile">Profile</button>
+                    </form>
+                </div>
+                <div class="navbar_item">
+                    <form action="{{ url_for('logout') }}">
+                        <button class="logout">Logout</button>
+                    </form>
+                </div>
             {% else %}
                 
                 <div>

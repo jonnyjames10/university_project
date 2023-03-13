@@ -48,6 +48,12 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+@app.route("/profile", methods=['GET', 'POST'])
+@login_required
+def profile():
+    user = User.query.get_or_404(current_user.id)
+    return render_template('profile.html', user=user)
+
 @app.route("/primary_school")
 def primary_school():
     return render_template('primary_school.html')

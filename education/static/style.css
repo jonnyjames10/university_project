@@ -24,6 +24,10 @@ pre {
         Arial, sans-serif;
 }
 
+td {
+    color: white;
+}
+
 button {
     font-family: "SoDo Sans SemiBold", Helvetica Neue, Helvetica,
         Arial, sans-serif;
@@ -80,46 +84,51 @@ a:link {
 }
 
 .login,
-.register {
+.register,
+.profile,
+.logout,
+.edit_details {
     font-weight: 500;
     border: 1px solid #002252;
     border-radius: 40px;
+    color: white;
     padding: 5px 20px 5px 20px;
     font-weight: 600;
+    border-radius: 9px;
+    border: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: 18px;
+    height: 40px;
+    outline: 0;
+    text-align: center;
+    width: 100%;
 }
 
 .login:hover,
-.register:hover {
+.register:hover,
+.profile:hover,
+.logout:hover
+.edit_details:hover {
     opacity: 0.6;
     transition-duration: 0.3s;
 }
 
 .login {
     background-color: #5cd8f8;
-    border-radius: 9px;
-    border: 0;
-    box-sizing: border-box;
-    color: #eee;
-    cursor: pointer;
-    font-size: 18px;
-    height: 40px;
-    outline: 0;
-    text-align: center;
-    width: 100%;
+    
 }
 
 .register {
     background-color: rgb(64, 164, 227);
-    color: white;
-    border-radius: 9px;
-    border: 0;
-    box-sizing: border-box;
-    cursor: pointer;
-    font-size: 18px;
-    height: 40px;
-    outline: 0;
-    text-align: center;
-    width: 100%;
+}
+
+.profile {
+    background-color: rgb(64, 164, 227);
+}
+
+.logout {
+    background-color: rgb(39, 0, 167);
 }
 
 .register:hover {
@@ -253,22 +262,6 @@ a:link {
   
 .submit:active {
     background-color: #06b;
-}
-
-table {
-    color: white;
-    width: 100%;
-    border-collapse: collapse;
-}
-
-td, th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-th {
-    font-weight: bold;
 }
 
 .grid-container {
@@ -411,4 +404,28 @@ video {
     display: block;
     margin: 0 auto;
     width: 75vw;
+}
+
+.user_details {
+    margin-left: 5vw;
+    border-radius: 9px;
+    border: 0;
+}
+
+.profile_options {
+    color: white;
+    padding: 20px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.edit_details {
+    background-color: rgb(95, 47, 255);
+}
+
+.profile_options *:hover {
+    opacity: 0.6;
+    transition: 0.3s;
 }

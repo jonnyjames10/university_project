@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Profile</h1>
+
+    <h3>Your details: </h3>
+    <div class="user_details">
+        <table>
+            <tr><td>Name: {{ user.first_name }} {{ user.last_name }}</td></tr>
+            <tr><td>Email: {{ user.email }}</td></tr>
+            <tr><td>School: {{ user.school }}</td></tr>
+            <tr><td>Date of Birth: {{ user.date_of_birth }}</td></tr>
+        </table>
+    </div>
+    <div class="profile_options">
+        <div class="left_profile_buttons">
+            <form action="#">
+                <button class="edit_details">Edit Profile Details</button>
+            </form>
+        </div>
+        <div class="right_profile_buttons">
+            <form action="{{ url_for('logout') }}">
+                <button class="logout">Logout</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
