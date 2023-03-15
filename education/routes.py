@@ -10,9 +10,11 @@ def home():
     users = User.query.order_by(User.points.desc()).limit(5)
     return render_template('home.html', users=users)
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')
+@app.route("/admin")
+def admin():
+    #role = RoleMember.query.filter(RoleMember.user_id == current_user.id)
+    name = "jonny"
+    return render_template('admin/index.html', role=role, name=name)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -26,7 +28,7 @@ def register():
         db.session.commit()
 
         user = User.query.filter_by(email=form.email.data).first()
-        role = RoleMember(user_id = user.id, role_id = 1) # Automatically sets role of the user to a student
+        role = RoleMember(user_id = user.id, role_id = '1') # Automatically sets role of the user to a student
         db.session.add(role)
         db.session.commit()
         return redirect(url_for('home'))

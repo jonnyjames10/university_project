@@ -1,0 +1,18 @@
+{% if current_user.first_name == "Jonny" %}
+    {% extends 'admin/master.html' %}
+    {% block body %}
+        Welcome to the admin panel, {{ current_user.first_name }}
+        <br>
+        <p>Role: {{ role }}</p>
+        <p>{{ name }}</p>
+        {% if current_user.role.role_id == '3' %}
+            <p>True</p>
+        {% else %}
+            <p>False</p>
+        {% endif %}
+    {% endblock %}
+{% else %}
+    {{ current_user.role_id }}
+    Hello {{ current_user.first_name }}, please login as an admin before accessing this panel &nbsp|
+    <a href="{{ url_for('login') }}">Login&nbsp;</a>
+{% endif %}
