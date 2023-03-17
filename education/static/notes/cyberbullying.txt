@@ -1,7 +1,7 @@
-These are the cyberbullying notes
+This page will allow students to read notes
 
-These will be outputted here
+After reading these notes, there will be questions they can answer
 
-Here is a new line
+By answering these questions correctly, they will be given points
 
-And anther
+These points will allow them to go up the leaderboard
