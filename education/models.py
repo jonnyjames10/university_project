@@ -42,9 +42,3 @@ def load_user(user_id):
 class Role(RoleMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False, unique=True)
-    #user_role = db.relationship('RoleMember', backref='role', lazy=True)
-
-#class RoleMember(db.Model):
-#    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
-#    role_id = db.Column(db.Integer, db.ForeignKey('role.id'), primary_key=True)
-#    user = db.relationship('User', backref='rolemember', lazy=True)
