@@ -8,6 +8,19 @@ from flask_login import login_user, logout_user, login_required, current_user
 @app.route("/home")
 def home():
     users = User.query.order_by(User.points.desc()).limit(5)
+    authen = current_user.is_authenticated
+    contains = current_user in users
+    if contains != True:
+        if authen == True:
+            order = User.query.order_by(User.points.desc())
+            pos = 1
+            for user in order:
+                if user.id == current_user.id:
+                    position = pos
+                    break
+                else:
+                    pos+=1
+            return render_template('home.html', users=users, position=position)
     return render_template('home.html', users=users)
 
 @app.route("/register", methods=['GET', 'POST'])

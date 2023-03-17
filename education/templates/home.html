@@ -10,7 +10,7 @@
             {% for user in users %}
             {% if user.email == current_user.email %}
             <tr>
-                <td style="border-radius: 40px; padding: 5px 20px 5px 20px;border: 5px solid red;border-radius: 9px;">{{user.first_name}}</td>
+                <td style="border: 5px solid red">{{user.first_name}}</td>
                 <td style="border: 5px solid red">{{ user.points }}</td>
             </tr>
             {% else %}
@@ -21,6 +21,18 @@
             {% endif %}
             {% endfor %}
             </tr>
+            {% if current_user.is_authenticated == True and current_user not in users %}
+                {% if position > 5 %}
+                    <tr>
+                        <td>Your position: {{position}}</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td>{{ current_user.first_name }}</td>
+                        <td>{{ current_user.points }}</td>
+                    </tr>
+                {% endif %}
+            {% endif %}
         </table>
     </div>
 {% endblock content %}
