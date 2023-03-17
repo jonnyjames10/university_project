@@ -14,11 +14,9 @@ login_manager.init_app(app)
 
 from flask_admin import Admin
 from education.views import AdminView
-from education.models import User, Role, RoleMember
+from education.models import User, Role
 admin = Admin(app, name='Admin panel', template_mode='bootstrap3')
 admin.add_view(AdminView(User, db.session))
 admin.add_view(AdminView(Role, db.session))
-admin.add_view(AdminView(RoleMember, db.session))
-
 
 from education import routes

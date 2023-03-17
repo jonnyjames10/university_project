@@ -1,6 +1,6 @@
 from flask import render_template, url_for, request, redirect, flash
 from education import app, db
-from education.models import User, RoleMember
+from education.models import User, users_roles, Role
 from education.forms import RegistrationForm, LoginForm
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -10,26 +10,17 @@ def home():
     users = User.query.order_by(User.points.desc()).limit(5)
     return render_template('home.html', users=users)
 
-@app.route("/admin")
-def admin():
-    #role = RoleMember.query.filter(RoleMember.user_id == current_user.id)
-    name = "jonny"
-    return render_template('admin/index.html', role=role, name=name)
-
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
+        student_role = Role.query.filter_by(name='student').first()
         user = User(first_name = form.first_name.data,
             last_name = form.last_name.data, email = form.email.data,
             password = form.password.data, date_of_birth = form.date_of_birth.data,
-            school = form.school.data, points = '0')
+            school = form.school.data, points = '0', role=[student_role])
+        
         db.session.add(user)
-        db.session.commit()
-
-        user = User.query.filter_by(email=form.email.data).first()
-        role = RoleMember(user_id = user.id, role_id = '1') # Automatically sets role of the user to a student
-        db.session.add(role)
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('register.html', title='Register',

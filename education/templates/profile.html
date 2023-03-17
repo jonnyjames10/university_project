@@ -9,10 +9,16 @@
             <tr><td>Email: {{ user.email }}</td></tr>
             <tr><td>School: {{ user.school }}</td></tr>
             <tr><td>Date of Birth: {{ user.date_of_birth }}</td></tr>
+            <tr><td></td></tr>
+            <tr><td>Points: {{ user.points }}</td></tr>
         </table>
     </div>
     <div class="profile_options">
         <div class="left_profile_buttons">
+            <!--
+                TODO:
+                    - Sort the action of the Edit Details button
+            -->
             <form action="#">
                 <button class="edit_details">Edit Profile Details</button>
             </form>
