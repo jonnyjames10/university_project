@@ -9,9 +9,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 def home():
     users = User.query.order_by(User.points.desc()).limit(5)
     authen = current_user.is_authenticated
-    contains = current_user in users
-    if contains != True:
-        if authen == True:
+    if authen == True:
+        contains = current_user in users
+        if contains != True:
             order = User.query.order_by(User.points.desc())
             pos = 1
             for user in order:
