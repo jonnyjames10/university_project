@@ -61,20 +61,24 @@ def profile():
     return render_template('profile.html', user=user)
 
 @app.route("/primary_school")
+
 def primary_school():
     return render_template('primary_school.html')
 
 @app.route("/primary_school/cyberbullying")
+@login_required
 def cyberbullying():
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
     return render_template('primary_school/cyberbullying.html', notes=notes)
 
 @app.route("/primary_school/phishing")
+@login_required
 def phishing():
     return render_template('primary_school/phishing.html')
 
 @app.route("/primary_school/suspicious_links")
+@login_required
 def suspicious_links():
     return render_template('primary_school/suspicious_links.html')
 
@@ -83,6 +87,7 @@ def gcse():
     return render_template('gcse.html')
 
 @app.route("/gcse/databases")
+@login_required
 def databases():
     with open("education/static/notes/databases.txt", "r") as text:
         notes = text.read()
