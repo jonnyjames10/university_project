@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% extends "layout.html" %}
-    {% block content %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,10 +17,16 @@
     <div class="paddle left" id="player-paddle"></div>
     <div class="paddle right" id="computer-paddle"></div>
     <dialog class="modal" id="modal">
-        <h2>Title</h2>
-        <p>Text</p>
+        <h2 id="title"></h2>
+        <p id="question"></p>
+        <form id="answers">
+            <input type="radio" id="a1" name="#"><label for="a1">Answer 1</label></br>
+            <input type="radio" id="a2" name="#"><label for="a2">Answer 2</label></br>
+            <input type="radio" id="a3" name="#"><label for="a3">Answer 3</label></br>
+            <input type="radio" id="a4" name="#"><label for="a4">Answer 4</label></br>
+            <input type="submit" value="Submit" style="margin-left: 20px">
+        </form>
         <button class="button close-button">Close</button>
     </dialog>
 </body>
-{% endblock content %}
 </html>
