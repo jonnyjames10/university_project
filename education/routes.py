@@ -61,7 +61,6 @@ def profile():
     return render_template('profile.html', user=user)
 
 @app.route("/primary_school")
-
 def primary_school():
     return render_template('primary_school.html')
 
@@ -71,6 +70,11 @@ def cyberbullying():
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
     return render_template('primary_school/cyberbullying.html', notes=notes)
+
+@app.route("/primary_school/cyberbullying/pong")
+@login_required
+def cyberbullying_pong():
+    return render_template('primary_school/games/pong.html')
 
 @app.route("/primary_school/phishing")
 @login_required
