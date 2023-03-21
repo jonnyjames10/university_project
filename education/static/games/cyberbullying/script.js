@@ -1,3 +1,11 @@
+//TODO:
+/*
+    Add more questions
+    Create an endpoint for when a user reaches a score
+    Figure out points to be given to the user through database
+    Clear code and remove any console.log
+*/
+
 import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 
@@ -8,13 +16,15 @@ const playerScoreElem = document.getElementById("player-score");
 const computerScoreElem = document.getElementById("computer-score");
 const modal = document.querySelector('#modal');
 const closeModal = document.querySelector('.close-button');
+const answers = document.getElementById('answers')
 const title = document.getElementById("title");
 const question = document.getElementById("question");
+const options = document.querySelectorAll('option');
 const optionA = document.getElementById("option-one-label");
 const optionB = document.getElementById("option-two-label");
 const optionC = document.getElementById("option-three-label");
 const optionD = document.getElementById("option-four-label");
-const sub = document.querySelector('check-answer');
+const closeBtn = document.getElementById("close")
 
 const questions = [
     {
@@ -54,10 +64,10 @@ let score = 0;
 
 title.innerHTML = "Welcome!"
 question.innerHTML = "Play pong and after every point, you will be asked a question.<br>You will be awarded points if you get the question correct.<br>The quicker you answer it correctly, the more points you'll get."
-optionA.innerHTML = "Option 1";
-optionB.innerHTML = "Option 2";
-optionC.innerHTML = "Option 3";
-optionD.innerHTML = "Option 4";
+closeBtn.innerHTML = "Start"
+answers.style.display="none"
+console.log(questionNumber)
+console.log(score)
 modal.showModal();
 
 function update(time) {
@@ -104,6 +114,45 @@ closeModal.addEventListener('click', () => {
     playing = true;
 })
 
+document.getElementById('submitBtn').onclick = function() {
+    console.log("Button clicked")
+    const currentQuestion = shuffledQuestions[questionNumber];
+    const currentQuestionAnswer = currentQuestion.correctOption;
+    console.log(currentQuestionAnswer)
+
+
+    const answer = getSelected()
+    console.log("currentQuestionAnswer: " + currentQuestionAnswer)
+    if (answer === currentQuestionAnswer) {
+        score++
+        question.innerHTML = "Score: " + score
+        answers.style.display="none"
+        console.log("Correct")
+        title.innerHTML = "Correct!"
+    } else {
+        question.innerHTML = "Score: " + score
+        answers.style.display="none"
+        console.log("Incorrect")
+        title.innerHTML = "Incorrect!"
+    }
+    closeBtn.style.display = "block"
+    closeBtn.innerHTML = "Continue"
+    console.log(score)
+    ball.reset();
+    computerPaddle.reset();
+    questionNumber++
+    // window.requestAnimationFrame(update)
+}
+
+function getSelected() {
+    let answer
+    let selected = document.querySelector('input[name="option"]:checked') 
+    console.log("selected: " + selected.value)
+    
+    console.log("Answer: " + answer)
+    return selected.value
+}
+
 function handleLose() {
     playing = false;
     const rect = ball.rect();
@@ -117,58 +166,18 @@ function handleLose() {
         // Select the question from the selected list and the corresponding answer
         // Set the innerHTML title, question and answers
     const currentQuestion = shuffledQuestions[questionNumber];
+    console.log(questionNumber)
     title.innerHTML = "New question";
     question.innerHTML = currentQuestion.question;
     optionA.innerHTML = currentQuestion.optionA;
     optionB.innerHTML = currentQuestion.optionB;
     optionC.innerHTML = currentQuestion.optionC;
     optionD.innerHTML = currentQuestion.optionD;
+    answers.style.display = "block"
+    closeBtn.style.display = "none"
         // Show the modal
         // Need to sort the submit button - currently restarts the webpage
     modal.showModal(); // Pop up question for the answer
-    ball.reset();
-    computerPaddle.reset();
-}
-
-function checkAnswer() {
-    console.log("Here")
-    const currentQuestion = shuffledQuestions[questionNumber];
-    const currentQuestionAnswer = currentQuestion.correctOption;
-    const options = document.getElementsByName("option");
-    let correctOption;
-
-    options.forEach((option) => {
-        if (option.value === currentQuestionAnswer) {
-            correctOption = option.labels[0].id
-        }
-    })
-    
-    if (options[0].checked === false && options[1].checked === false && options[2].checked === false && options[3].checked == false) {
-        document.getElementById('option-modal').style.display = "flex"
-    }
-
-    options.forEach((option) => {
-        if (option.checked === true && option.value === currentQuestionAnswer) {
-            document.getElementById(correctOption).style.backgroundColor = "green"
-            playerScore++ //adding to player's score
-            // questionNumber++ //adding 1 to index so has to display next question..
-            //set to delay question number till when next question loads
-            setTimeout(() => {
-                questionNumber
-            }, 1000)
-        }
-
-        else if (option.checked && option.value !== currentQuestionAnswer) {
-            const wrongLabelId = option.labels[0].id
-            document.getElementById(wrongLabelId).style.backgroundColor = "red"
-            document.getElementById(correctOption).style.backgroundColor = "green"
-            // questionNumber++
-            //set to delay question number till when next question loads
-            setTimeout(() => {
-                questionNumber++
-            }, 1000)
-        }
-    })
 }
 
 function handleQuestions() {
