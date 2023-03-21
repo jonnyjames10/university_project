@@ -1,6 +1,7 @@
 //TODO:
 /*
     Add more questions
+    If answer is incorrect, show the correct answer
     Create an endpoint for when a user reaches a score
     Figure out points to be given to the user through database
     Clear code and remove any console.log
