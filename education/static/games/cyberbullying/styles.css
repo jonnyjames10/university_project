@@ -114,3 +114,36 @@ body {
     padding: 1em;
     max-width: 50ch;
 }
+
+@media(min-width : 300px) and (max-width : 350px){
+    .game-quiz-container{
+        width: 90%;
+        height: 80vh;
+    }
+    .game-details-container h1{
+        font-size: 0.8rem;
+    }
+
+    .game-question-container{
+        height: 6rem;
+    }
+    .game-question-container h1{
+       font-size: 0.9rem;
+    }
+
+    .game-options-container span{
+        width: 90%;
+        height: 2.5rem;
+    }
+    .game-options-container span label{
+        font-size: 0.8rem;
+    }
+    .modal-content-container{
+        width: 90%;
+        height: 25rem;
+    }
+
+    .modal-content-container h1{
+        font-size: 1.2rem;
+    }
+}
