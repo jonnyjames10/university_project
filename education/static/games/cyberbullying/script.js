@@ -125,7 +125,6 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
     let d2 = new Date()
     endTime = d2.getTime()
     const timeTaken = endTime - startTime
-    console.log("time taken: " + timeTaken)
     clearTimeout(timer)
     const currentQuestion = shuffledQuestions[questionNumber];
     const currentQuestionAnswer = currentQuestion.correctOption;
@@ -136,17 +135,14 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
         // points = totalTime / timeTaken (in ms)
         let points = Math.round(30000 / timeTaken) * 3
         dbPoints += points
-        console.log("dbPoints: " + dbPoints)
         
         question.innerHTML = "Score: " + score
         answers.style.display="none"
-        console.log("Correct")
         title.innerHTML = "Correct!"
     } else {
         title.innerHTML = "Incorrect!"
         question.innerHTML = "The correct answer was: " + currentQuestionAnswer + "<br>Score: " + score
         answers.style.display="none"
-        console.log("Incorrect")
     }
     closeBtn.style.display = "block"
     closeBtn.innerHTML = "Continue"
@@ -157,8 +153,8 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
 }
 
 function endGame() {
+    question.innerHTML = "Your points will be added to your profile and you will be taken back to the home page!"
     title.innerHTML = "Game has finished!"
-    question.innerHTML = "Your points will be added to your profile and you will be taken back to the topic page!"
     closeBtn.style.display = "none"
     homeBtn.style.display = "block"
     modal.showModal()
@@ -192,15 +188,11 @@ function handleLose() {
     } else {
         computerScoreElem.textContent = parseInt(computerScoreElem.textContent) + 1;
     }
-    console.log("questionNumber:" + questionNumber)
-    console.log("length of questions:" + shuffledQuestions.length)
-    if (questionNumber == shuffledQuestions.length) {
-        console.log("RUN")
-        endGame()
-    }
-    const currentQuestion = shuffledQuestions[questionNumber];
-    console.log(questionNumber)
+
     title.innerHTML = "New question";
+    if (questionNumber == shuffledQuestions.length) { endGame() }
+
+    const currentQuestion = shuffledQuestions[questionNumber];
     question.innerHTML = currentQuestion.question;
     optionA.innerHTML = currentQuestion.optionA;
     optionB.innerHTML = currentQuestion.optionB;
@@ -208,6 +200,10 @@ function handleLose() {
     optionD.innerHTML = currentQuestion.optionD;
     answers.style.display = "block"
     closeBtn.style.display = "none"
+    document.getElementById("option-one").checked = false;
+    document.getElementById("option-two").checked = false;
+    document.getElementById("option-three").checked = false;
+    document.getElementById("option-four").checked = false;
         // Show the modal
     modal.showModal(); // Pop up question for the answer
     let d1 = new Date()
