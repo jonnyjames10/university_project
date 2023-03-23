@@ -16,15 +16,6 @@
     <div class="ball" id="ball"></div>
     <div class="paddle left" id="player-paddle"></div>
     <div class="paddle right" id="computer-paddle"></div>
-    <!--<p id="dbPoints">0</p>-->
-    <script>
-        /*function sendInfo() {
-            let points = document.getElementById('points').value;
-            const request = new XMLHttpRequest();
-            rquest.open('POST', '/add_points/${JSON.stringify(points)}');
-            request.send();
-        }*/
-    </script>
     <dialog class="modal" id="modal">
         <div class="dialog-box">
             <div id="titleDisplay">
@@ -48,7 +39,6 @@
             <button id="close" class="button close-button">Close</button>
             <form method="POST", action="">
                 {{ form.csrf_token }}
-                <!--<input type="hidden" id="dbPoints" value="0">-->
                 {{ form.dbPoints(class_="input", id="dbPoints", type="hidden", value="0", placeholder=" ") }}
                 <button id="home" type="text" class="submit">Finish</button>
             </form>

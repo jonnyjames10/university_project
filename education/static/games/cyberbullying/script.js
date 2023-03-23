@@ -54,6 +54,10 @@ const questions = [
     }
 ];
 
+const advantages = [
+    'paddle', 'ballSpeed', 'paddleSpeed'
+];
+
 // Game variables
 let lastTime;
 let playing = false;
@@ -133,12 +137,10 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
     const answer = getSelected();
     if (answer === currentQuestionAnswer) {
         score++;
-        // points = totalTime / timeTaken (in ms)
+
         let points = Math.round(30000 / timeTaken) * 3;
-        // dbPoints += points;
         totalPoints += points
         dbPoints.value = totalPoints
-        console.log(dbPoints)
         
         question.innerHTML = "Score: " + score;
         answers.style.display="none";
@@ -162,7 +164,6 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
     ball.reset();
     computerPaddle.reset();
     questionNumber++
-    // window.requestAnimationFrame(update)
 }
 
 function endGame() {
@@ -183,9 +184,15 @@ function noAnswer() {
     modal.close()
     const currentQuestion = shuffledQuestions[questionNumber];
     const currentQuestionAnswer = currentQuestion.correctOption;
-
+    let ans;
+        for (let i=0; i < answers.length; i++) {
+            if (answers[i].value == currentQuestionAnswer) {
+                ans = answers[i];
+            }
+        }
+        let ansValue = ans.value;
     title.innerHTML = "You ran out of time!"
-    question.innerHTML = "The correct answer was: " + currentQuestionAnswer + "<br>Score: " + score
+    question.innerHTML = "The correct answer was: " + currentQuestion[ansValue] + "<br>Score: " + score
     answers.style.display="none"
     closeBtn.style.display = "block"
     closeBtn.innerHTML = "Continue"
@@ -224,8 +231,9 @@ function handleLose() {
     document.getElementById("option-three").checked = false;
     document.getElementById("option-four").checked = false;
     countdown.style.display = "block"
-        // Show the modal
+
     modal.showModal(); // Pop up question for the answer
+
     let d1 = new Date()
     startTime = d1.getTime()
     timerRun = true;
