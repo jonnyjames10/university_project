@@ -1,6 +1,7 @@
 //TODO:
 /*
     Add more questions
+    Check user has answered the question (selected an option)
     If the user gets a question right, add an advantage
 */
 
@@ -167,7 +168,7 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
 }
 
 function endGame() {
-    question.innerHTML = "Your points will be added to your profile and you will be taken back to the home page!"
+    question.innerHTML = "Your points will be added to your profile and you will be taken back to the topic page!"
     title.innerHTML = "Game has finished!"
     closeBtn.style.display = "none"
     homeBtn.style.display = "block"
@@ -215,7 +216,10 @@ function handleLose() {
     }
 
     title.innerHTML = "New question";
-    if (questionNumber == shuffledQuestions.length) { endGame() }
+    if (questionNumber == shuffledQuestions.length) { 
+        endGame();
+        return;
+    }
 
     const currentQuestion = shuffledQuestions[questionNumber];
     question.innerHTML = currentQuestion.question;

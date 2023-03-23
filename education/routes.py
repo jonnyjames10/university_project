@@ -77,13 +77,11 @@ def cyberbullying():
 def cyberbullying_pong():
     form = PointsForm()
     if form.validate_on_submit():
-        print("OK")
-        print(form.dbPoints.data)
         user = User.query.get_or_404(current_user.id)
         user.points += int(form.dbPoints.data)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('cyberbullying'))
     return render_template('primary_school/games/pong.html', form=form)
 
 @app.route("/primary_school/phishing")
