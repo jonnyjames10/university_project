@@ -16,24 +16,43 @@
     <div class="ball" id="ball"></div>
     <div class="paddle left" id="player-paddle"></div>
     <div class="paddle right" id="computer-paddle"></div>
+    <!--<p id="dbPoints">0</p>-->
+    <script>
+        /*function sendInfo() {
+            let points = document.getElementById('points').value;
+            const request = new XMLHttpRequest();
+            rquest.open('POST', '/add_points/${JSON.stringify(points)}');
+            request.send();
+        }*/
+    </script>
     <dialog class="modal" id="modal">
-        <h2 id="title"></h2>
-        <p id="question"></p>
-        <form id="answers">
-            <input type="radio" id="option-one" name="option" class="radio" value="optionA" />
-            <label for="option-one" class="option" id="option-one-label"></label>
-            <input type="radio" id="option-two" name="option" class="radio" value="optionB" />
-            <label for="option-two" class="option" id="option-two-label"></label>
-            <input type="radio" id="option-three" name="option" class="radio" value="optionC" />
-            <label for="option-three" class="option" id="option-three-label"></label>
-            <input type="radio" id="option-four" name="option" class="radio" value="optionD" />
-            <label for="option-four" class="option" id="option-four-label"></label>
-            <div class="next-button-container">
-                <button type="button" id="submitBtn" onclick="checkAnswer()">Check Answer</button>
+        <div class="dialog-box">
+            <div id="titleDisplay">
+                <h2 id="title"></h2>
             </div>
-        </form>
-        <button id="close" class="button close-button">Close</button>
-        <button id="home" class="button close-button"><a href="{{ url_for('home') }}">Go Home</a></button>
+            <span id="countdown">30</span>
+            <p id="question"></p>
+            <form id="answers">
+                <input type="radio" id="option-one" name="option" class="radio" value="optionA" />
+                <label for="option-one" class="option" id="option-one-label"></label>
+                <input type="radio" id="option-two" name="option" class="radio" value="optionB" />
+                <label for="option-two" class="option" id="option-two-label"></label>
+                <input type="radio" id="option-three" name="option" class="radio" value="optionC" />
+                <label for="option-three" class="option" id="option-three-label"></label>
+                <input type="radio" id="option-four" name="option" class="radio" value="optionD" />
+                <label for="option-four" class="option" id="option-four-label"></label>
+                <div class="next-button-container">
+                    <button type="button" id="submitBtn" onclick="checkAnswer()">Check Answer</button>
+                </div>
+            </form>
+            <button id="close" class="button close-button">Close</button>
+            <form method="POST", action="">
+                {{ form.csrf_token }}
+                <!--<input type="hidden" id="dbPoints" value="0">-->
+                {{ form.dbPoints(class_="input", id="dbPoints", type="hidden", value="0", placeholder=" ") }}
+                <button id="home" type="text" class="submit">Finish</button>
+            </form>
+        </div>
     </dialog>
 </body>
 </html>

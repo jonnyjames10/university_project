@@ -1,7 +1,8 @@
 from flask import render_template, url_for, request, redirect, flash
+import json
 from education import app, db
 from education.models import User, users_roles, Role
-from education.forms import RegistrationForm, LoginForm
+from education.forms import RegistrationForm, LoginForm, PointsForm
 from flask_login import login_user, logout_user, login_required, current_user
 
 @app.route("/")
@@ -71,10 +72,19 @@ def cyberbullying():
         notes = text.read()
     return render_template('primary_school/cyberbullying.html', notes=notes)
 
-@app.route("/primary_school/cyberbullying/pong")
+@app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
 @login_required
 def cyberbullying_pong():
-    return render_template('primary_school/games/pong.html')
+    form = PointsForm()
+    if form.validate_on_submit():
+        print("OK")
+        print(form.dbPoints.data)
+        user = User.query.get_or_404(current_user.id)
+        user.points += int(form.dbPoints.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('primary_school/games/pong.html', form=form)
 
 @app.route("/primary_school/phishing")
 @login_required

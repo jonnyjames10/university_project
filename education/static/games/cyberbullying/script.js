@@ -1,12 +1,7 @@
 //TODO:
 /*
     Add more questions
-    For an incorrect answer, show the actual answer rather than just the option name
-    Deselect all options before showing them
-    Figure out points to be given to the user through database:
-        Add points to the users profile on the database (call a function in the HTML file)
     If the user gets a question right, add an advantage
-    Clear code and remove any console.log
 */
 
 import Ball from './Ball.js';
@@ -21,6 +16,7 @@ const modal = document.querySelector('#modal');
 const closeModal = document.querySelector('.close-button');
 const answers = document.getElementById('answers')
 const title = document.getElementById("title");
+const countdown = document.getElementById("countdown")
 const question = document.getElementById("question");
 const options = document.querySelectorAll('option');
 const optionA = document.getElementById("option-one-label");
@@ -29,6 +25,7 @@ const optionC = document.getElementById("option-three-label");
 const optionD = document.getElementById("option-four-label");
 const closeBtn = document.getElementById("close")
 const homeBtn = document.getElementById("home")
+const dbPoints = document.getElementById("dbPoints")
 
 const questions = [
     {
@@ -61,6 +58,8 @@ const questions = [
 let lastTime;
 let playing = false;
 let timer;
+let timeDisplay;
+let timerRun;
 let startTime;
 let endTime;
 
@@ -68,11 +67,12 @@ let endTime;
 let shuffledQuestions = [];
 let questionNumber = 0;
 let score = 0;
-let dbPoints = 0;
+let totalPoints = 0;
 
 title.innerHTML = "Welcome!"
 question.innerHTML = "Play pong and after every point, you will be asked a question.<br>You will be awarded points if you get the question correct.<br>The quicker you answer it correctly, the more points you'll get."
 closeBtn.innerHTML = "Start"
+countdown.style.display = "none"
 answers.style.display="none"
 homeBtn.style.display="none"
 modal.showModal();
@@ -122,27 +122,40 @@ closeModal.addEventListener('click', () => {
 })
 
 document.getElementById('submitBtn').onclick = function checkAnswer() {
-    let d2 = new Date()
-    endTime = d2.getTime()
-    const timeTaken = endTime - startTime
-    clearTimeout(timer)
+    timerRun = false;
+    let d2 = new Date();
+    endTime = d2.getTime();
+    const timeTaken = endTime - startTime;
+    clearTimeout(timer);
     const currentQuestion = shuffledQuestions[questionNumber];
     const currentQuestionAnswer = currentQuestion.correctOption;
 
-    const answer = getSelected()
+    const answer = getSelected();
     if (answer === currentQuestionAnswer) {
-        score++
+        score++;
         // points = totalTime / timeTaken (in ms)
-        let points = Math.round(30000 / timeTaken) * 3
-        dbPoints += points
+        let points = Math.round(30000 / timeTaken) * 3;
+        // dbPoints += points;
+        totalPoints += points
+        dbPoints.value = totalPoints
+        console.log(dbPoints)
         
-        question.innerHTML = "Score: " + score
-        answers.style.display="none"
-        title.innerHTML = "Correct!"
+        question.innerHTML = "Score: " + score;
+        answers.style.display="none";
+        title.innerHTML = "Correct!";
+        countdown.style.display = "none";
     } else {
+        let ans;
+        for (let i=0; i < answers.length; i++) {
+            if (answers[i].value == currentQuestionAnswer) {
+                ans = answers[i];
+            }
+        }
+        let ansValue = ans.value;
         title.innerHTML = "Incorrect!"
-        question.innerHTML = "The correct answer was: " + currentQuestionAnswer + "<br>Score: " + score
+        question.innerHTML = "The correct answer was: " + currentQuestion[ansValue] + "<br>Score: " + score
         answers.style.display="none"
+        countdown.style.display = "none"
     }
     closeBtn.style.display = "block"
     closeBtn.innerHTML = "Continue"
@@ -166,15 +179,20 @@ function getSelected() {
 }
 
 function noAnswer() {
+    timerRun = false;
     modal.close()
     const currentQuestion = shuffledQuestions[questionNumber];
     const currentQuestionAnswer = currentQuestion.correctOption;
+
     title.innerHTML = "You ran out of time!"
     question.innerHTML = "The correct answer was: " + currentQuestionAnswer + "<br>Score: " + score
     answers.style.display="none"
     closeBtn.style.display = "block"
     closeBtn.innerHTML = "Continue"
+    countdown.style.display = "none"
+
     modal.show()
+
     ball.reset();
     computerPaddle.reset();
     questionNumber++
@@ -198,17 +216,39 @@ function handleLose() {
     optionB.innerHTML = currentQuestion.optionB;
     optionC.innerHTML = currentQuestion.optionC;
     optionD.innerHTML = currentQuestion.optionD;
+    countdown.innerHTML = "30";
     answers.style.display = "block"
     closeBtn.style.display = "none"
     document.getElementById("option-one").checked = false;
     document.getElementById("option-two").checked = false;
     document.getElementById("option-three").checked = false;
     document.getElementById("option-four").checked = false;
+    countdown.style.display = "block"
         // Show the modal
     modal.showModal(); // Pop up question for the answer
     let d1 = new Date()
     startTime = d1.getTime()
-    timer = setTimeout(function() {noAnswer()}, 3000)
+    timerRun = true;
+    timeDisplay = startTimer(29)
+    timer = setTimeout(function() {noAnswer()}, 30000)
+}
+
+function startTimer(duration) {
+    var timer = duration, seconds;
+    const t = setInterval(function () {
+        seconds = parseInt(timer % 60, 10);
+
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        countdown.innerHTML = seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+        if (seconds <= 0 || timerRun == false) {
+            clearInterval(t)
+        }
+    }, 1000);
 }
 
 function handleQuestions() {

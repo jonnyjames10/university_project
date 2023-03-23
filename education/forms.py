@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SelectField, SubmitField, TextAreaField, MultipleFileField, FileField, RadioField, IntegerField, SelectMultipleField, BooleanField, DateField
+from wtforms import StringField, PasswordField, SelectField, SubmitField, HiddenField, MultipleFileField, FileField, RadioField, IntegerField, SelectMultipleField, BooleanField, DateField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
 from datetime import datetime, timedelta
@@ -35,4 +35,8 @@ class LoginForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
     password = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('Login')
+
+class PointsForm(FlaskForm):
+    dbPoints = HiddenField('dbPoints', validators = [DataRequired()])
+    submit = SubmitField('Finish')
 
