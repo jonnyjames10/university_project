@@ -20,6 +20,7 @@ def before_request():
 def home():
     users = User.query.order_by(User.points.desc()).limit(5)
     authen = current_user.is_authenticated
+    flash('New message goes here')
     if authen == True:
         contains = current_user in users
         if contains != True:
@@ -31,7 +32,6 @@ def home():
                     break
                 else:
                     pos+=1
-            flash('Welcome to the website!')
             return render_template('home.html', users=users, position=position)
     return render_template('home.html', users=users)
 

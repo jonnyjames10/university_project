@@ -56,9 +56,17 @@
         <div>
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
+                    <p style="
+                        text-align: center;
+                        color: #F29F05;">New message:</p>
                     <ul class="flashes">
                         {% for message in messages %}
-                            <li>{{ message }}</li> <!--Sort the CSS for this-->
+                            <li style="
+                                list-style: none;
+                                text-align: center;
+                                padding-bottom: 1rem;
+                                color: #F29F05;
+                            ">{{ message }}</li> <!--Sort the CSS for this-->
                         {% endfor %}
                     </ul>
                 {% endif %}
