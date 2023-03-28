@@ -19,6 +19,7 @@ class User(UserMixin, db.Model):
     date_of_birth = db.Column(db.DateTime, nullable=False)
     school = db.Column(db.String(256), nullable=False)
     points = db.Column(db.Integer, nullable=False)
+    authenticated = db.Column(db.Boolean, default=False)
     role = db.relationship('Role', secondary=users_roles, backref=db.backref('user', lazy='dynamic'))
 
     def __repr__(self):
@@ -34,6 +35,9 @@ class User(UserMixin, db.Model):
     
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def is_anonymous(self):
+        return False
 
 @login_manager.user_loader
 def load_user(user_id):

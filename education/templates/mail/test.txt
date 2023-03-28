@@ -1,5 +1,9 @@
 Hi {{user.first_name}}
 
-Here is a test
+Before doing anything else, you need to confirm your account.
 
-From me
+Click the link below to confirm your email.
+
+{{ url_for('confirm', token=token, _external=True) }}
+
+From CyberEducational

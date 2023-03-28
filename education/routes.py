@@ -3,8 +3,15 @@ from education import app, db, mail
 from education.models import User, users_roles, Role
 from education.forms import RegistrationForm, LoginForm, PointsForm
 from education.email import send_mail
+from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
+
+@app.before_request
+def before_request():
+    if current_user.is_authenticated and not current_user.authenticated and \
+        request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile']:
+        return redirect(url_for('unconfirmed'))
 
 @app.route("/")
 @app.route("/home")
@@ -22,6 +29,7 @@ def home():
                     break
                 else:
                     pos+=1
+            flash('Welcome to the website!')
             return render_template('home.html', users=users, position=position)
     return render_template('home.html', users=users)
 
@@ -34,17 +42,44 @@ def register():
             last_name = form.last_name.data, email = form.email.data,
             password = form.password.data, date_of_birth = form.date_of_birth.data,
             school = form.school.data, points = '0', role=[student_role])
-        print(user.email)
-        #msg = Message("Hello", recipients=[user.email])
-        #msg.body = "This is a test email"
-        #mail.send(msg)
-        send_mail(user.email, 'New Subject for TEST', '/mail/test', user=user)
+        confirmation_token = generate_confirmation_token(user.id)
+        send_mail(user.email, 'New Subject for TEST', '/mail/test', user=user, token=confirmation_token)
         db.session.add(user)
         db.session.commit()
-
-        return redirect(url_for('home'))
+        flash('Check your inbox to verify your email!')
+        return redirect(url_for('login'))
     return render_template('register.html', title='Register',
         form=form)
+
+@app.route('/confirm/<token>')
+@login_required
+def confirm(token):
+    if current_user.authenticated:
+        return redirect(url_for('home'))
+    key = verify_confirmation_token(token)
+    if key:
+        if key.get('confirm') == current_user.id:
+            current_user.authenticated = 1
+            db.session.add(current_user)
+            db.session.commit()
+            print("Wokrs!")
+            flash('You have confirmed your account!')
+        return redirect(url_for('home'))
+
+@app.route('/unconfirmed', methods=['POST', 'GET'])
+def unconfirmed():
+    if current_user.authenticated:
+        return redirect(url_for('home'))
+    return render_template('unconfirmed.html')
+
+@app.route('/resend_confirmation_email', methods=['POST', 'GET'])
+def resend_confirmation_email():
+    if current_user.authenticated:
+        return redirect(url_for('home'))
+    token = generate_confirmation_token(current_user.id)
+    flash("A new confirmation link has been sent to your email")
+    send_mail(current_user.email, 'Confirm your account', '/mail/test', user=current_user, token=token)
+    return redirect(url_for('unconfirmed'))
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -72,8 +107,9 @@ def primary_school():
     return render_template('primary_school.html')
 
 @app.route("/primary_school/cyberbullying")
-@login_required
 def cyberbullying():
+    #if current_user.is_anonymous:
+        #return redirect(url_for('login'))
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
     return render_template('primary_school/cyberbullying.html', notes=notes)

@@ -1,5 +1,9 @@
 <p>Hi {{user.first_name}}</p>
 
-<p>Here is a test</p>
+<p>Before doing anything else, you need to confirm your account.</p>
 
-<p>From me</p>
+<p>Click the link below to confirm your email</p>
+
+<a href="{{ url_for('confirm', token=token, _external=True) }}">Click here</a>
+
+<p>From CyberEducational</p>
