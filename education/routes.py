@@ -1,9 +1,10 @@
 from flask import render_template, url_for, request, redirect, flash
-import json
-from education import app, db
+from education import app, db, mail
 from education.models import User, users_roles, Role
 from education.forms import RegistrationForm, LoginForm, PointsForm
+from education.email import send_mail
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_mail import Message
 
 @app.route("/")
 @app.route("/home")
@@ -33,9 +34,14 @@ def register():
             last_name = form.last_name.data, email = form.email.data,
             password = form.password.data, date_of_birth = form.date_of_birth.data,
             school = form.school.data, points = '0', role=[student_role])
-        
+        print(user.email)
+        #msg = Message("Hello", recipients=[user.email])
+        #msg.body = "This is a test email"
+        #mail.send(msg)
+        send_mail(user.email, 'New Subject for TEST', '/mail/test', user=user)
         db.session.add(user)
         db.session.commit()
+
         return redirect(url_for('home'))
     return render_template('register.html', title='Register',
         form=form)
