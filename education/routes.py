@@ -12,6 +12,8 @@ def before_request():
     if current_user.is_authenticated and not current_user.authenticated and \
         request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile']:
         return redirect(url_for('unconfirmed'))
+    if current_user.is_anonymous and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile']:
+        return redirect(url_for('login'))
 
 @app.route("/")
 @app.route("/home")
