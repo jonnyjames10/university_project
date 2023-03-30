@@ -45,10 +45,11 @@ def register():
             password = form.password.data, date_of_birth = form.date_of_birth.data,
             school = form.school.data, points = '0', role=[student_role])
         confirmation_token = generate_confirmation_token(user.id)
-        send_mail(user.email, 'New Subject for TEST', '/mail/test', user=user, token=confirmation_token)
+        send_mail(user.email, 'Confirm your email', '/mail/test', user=user, token=confirmation_token)
         db.session.add(user)
         db.session.commit()
-        flash('Check your inbox to verify your email!')
+        flash('Registration succesful!')
+        flash('Check your inbox to verify your email (Check your spam folder)')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register',
         form=form)
