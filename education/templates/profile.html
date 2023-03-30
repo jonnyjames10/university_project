@@ -9,6 +9,13 @@
             <tr><td>Email: {{ user.email }}</td></tr>
             <tr><td>School: {{ user.school }}</td></tr>
             <tr><td>Date of Birth: {{ user.date_of_birth }}</td></tr>
+            {% if user.role == ["student"] %}
+                <tr><td>Type of User: Student</td></tr>
+            {% elif user.role == ["teacher"] %}
+                <tr><td>Type of User: Teacher</td></tr>
+            {% elif user.role == ["admin"] %}
+                <tr><td>Type of User: Admin</td></tr>
+            {% endif %}
             <tr><td><hr></td></tr>
             <tr><td>Points: {{ user.points }}</td></tr>
         </table>
