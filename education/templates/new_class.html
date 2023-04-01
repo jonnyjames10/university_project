@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Create a new class</h1>
+    {% for pupil in pupils %}
+        <p>{{ pupil.first_name }} {{pupil.last_name}}</p>
+    {% endfor %}
+{% endblock %}

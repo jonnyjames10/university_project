@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Teacher Admin Page</h1>
+    Select a Class:
+    <!--Display list of classes under the teacher's ID-->
+
+    <!--New class button-->
+    <div class="navbar_item">
+        <form action="{{ url_for('new_class') }}">
+            <button class="profile">New Class</button>
+        </form>
+    </div>
+{% endblock %}

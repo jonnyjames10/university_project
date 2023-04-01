@@ -10,9 +10,9 @@ from flask_mail import Message
 @app.before_request
 def before_request():
     if current_user.is_authenticated and not current_user.authenticated and \
-        request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile']:
+        request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         return redirect(url_for('unconfirmed'))
-    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile']:
+    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         return redirect(url_for('login'))
 
 @app.route("/")
@@ -20,7 +20,6 @@ def before_request():
 def home():
     users = User.query.order_by(User.points.desc()).limit(5)
     authen = current_user.is_authenticated
-    flash('New message goes here')
     if authen == True:
         contains = current_user in users
         if contains != True:
@@ -50,7 +49,8 @@ def register():
         db.session.commit()
         flash('Registration succesful!')
         flash('Check your inbox to verify your email (Check your spam folder)')
-        return redirect(url_for('login'))
+        login_user(user)
+        return redirect(url_for('home'))
     return render_template('register.html', title='Register',
         form=form)
 
@@ -65,9 +65,9 @@ def confirm(token):
             current_user.authenticated = 1
             db.session.add(current_user)
             db.session.commit()
-            print("Wokrs!")
             flash('You have confirmed your account!')
-        return redirect(url_for('home'))
+            return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route('/unconfirmed', methods=['POST', 'GET'])
 def unconfirmed():
@@ -153,3 +153,28 @@ def databases():
 @app.route("/a_level")
 def a_level():
     return render_template('a_level.html')
+
+@app.route("/teacher_home")
+@login_required
+def teacher_home():
+    if "teacher" in current_user.role:
+        return render_template('teacher_home.html')
+    else:
+        flash("You must be a teacher to access this page")
+        return redirect(url_for('home'))
+    
+@app.route("/new_class")
+@login_required
+def new_class():
+    if "teacher" not in current_user.role:
+        flash("You must be a teacher to access this page")
+        return redirect(url_for('home'))
+    else:
+        school = current_user.school
+        pupils = User.query.filter(User.school == school) # User goes to the same school and has the role 'student'
+        return render_template('new_class.html', pupils=pupils)
+    
+#@app.route("create_class/<int:teacher_id>/<students array")
+#@login_required
+#def create_class(teacher_id, student array):
+#   class = Class(name = form.name.data)
