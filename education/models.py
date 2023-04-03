@@ -35,6 +35,7 @@ class User(UserMixin, db.Model):
     role = db.relationship('Role', secondary=users_roles, backref=db.backref('user', lazy='dynamic'))
     class_teacher = db.relationship('TeachingClass', secondary=class_teacher, backref=db.backref('user_teacher', lazy='dynamic'))
     class_student = db.relationship('TeachingClass', secondary=class_student, backref=db.backref('user_student', lazy='dynamic'))
+    homework_results = db.relationship('HomeworkResult', backref='user', lazy=True)
 
     def __repr__(self):
         return f"User('{self.id}', {self.email}')"
@@ -65,3 +66,36 @@ class TeachingClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    homeworks = db.Relationship('Homework', backref='teaching_class', lazy=True)
+
+class Homework(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    due_date = db.Column(db.DateTime, nullable=False)
+    notes = db.Column(db.Text)
+    class_id = db.Column(db.Integer, db.ForeignKey('teaching_class.id'), nullable=False)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=False)
+    results = db.relationship('HomeworkResult', backref='homework', lazy=True)
+
+class HomeworkResult(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    mark = db.Column(db.Integer, nullable=False)
+    homework_id = db.Column(db.Integer, db.ForeignKey('homework.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+class Activity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    url_link = db.Column(db.String(200), nullable=False, unique=True)
+    activity_type_id = db.Column(db.Integer, db.ForeignKey('activity_type.id'), nullable=False)
+    level_id = db.Column(db.Integer, db.ForeignKey('level.id'), nullable=False)
+    homework = db.relationship('Homework', backref='activity', lazy=True)
+
+class ActivityType(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    type_name = db.Column(db.String(20), nullable=False, unique=True)
+    activities = db.Relationship('Activity', backref='activity_type', lazy=True)
+
+class Level(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    level_name = db.Column(db.String(20), nullable=False, unique=True)
+    activities = db.Relationship('Activity', backref='level', lazy=True)
