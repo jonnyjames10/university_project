@@ -70,12 +70,14 @@ def confirm(token):
     return redirect(url_for('home'))
 
 @app.route('/unconfirmed', methods=['POST', 'GET'])
+@login_required
 def unconfirmed():
     if current_user.authenticated:
         return redirect(url_for('home'))
     return render_template('unconfirmed.html')
 
 @app.route('/resend_confirmation_email', methods=['POST', 'GET'])
+@login_required
 def resend_confirmation_email():
     if current_user.authenticated:
         return redirect(url_for('home'))
@@ -178,3 +180,4 @@ def new_class():
 #@login_required
 #def create_class(teacher_id, student array):
 #   class = Class(name = form.name.data)
+
