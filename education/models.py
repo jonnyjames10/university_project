@@ -10,12 +10,6 @@ users_roles = db.Table(
     db.Column('role_id', db.Integer, db.ForeignKey('role.id'))
 )
 
-class_teacher = db.Table(
-    'class_teacher',
-    db.Column('teacher_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('class_id', db.Integer, db.ForeignKey('teaching_class.id'))
-)
-
 class_student = db.Table(
     'class_student',
     db.Column('student_id', db.Integer, db.ForeignKey('user.id')),
@@ -33,7 +27,7 @@ class User(UserMixin, db.Model):
     points = db.Column(db.Integer, nullable=False)
     authenticated = db.Column(db.Boolean, default=False)
     role = db.relationship('Role', secondary=users_roles, backref=db.backref('user', lazy='dynamic'))
-    class_teacher = db.relationship('TeachingClass', secondary=class_teacher, backref=db.backref('user_teacher', lazy='dynamic'))
+    class_teacher = db.relationship('TeachingClass', backref='user', lazy=True)
     class_student = db.relationship('TeachingClass', secondary=class_student, backref=db.backref('user_student', lazy='dynamic'))
     homework_results = db.relationship('HomeworkResult', backref='user', lazy=True)
 
@@ -66,6 +60,7 @@ class TeachingClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    teacher_user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     homeworks = db.Relationship('Homework', backref='teaching_class', lazy=True)
 
 class Homework(db.Model):
