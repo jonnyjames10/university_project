@@ -18,7 +18,7 @@
             </form>
         </div>
         <div class="navbar_item">
-            <form action="{{ url_for('set_homework') }}">
+            <form action="{{ url_for('set_homework', class_id=t_class.id) }}">
                 <button class="register" style="width:15vw; float: right;">Set Homework</button>
             </form>
         </div>

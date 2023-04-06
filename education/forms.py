@@ -3,7 +3,7 @@ from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators = [DataRequired()])
@@ -26,10 +26,9 @@ class RegistrationForm(FlaskForm):
         elif any(char.isdigit() for char in password.data) == False:
             raise ValidationError('Password must contain at least one number.')
     
-    #TODO:
-    #def validate_date_of_birth(self, date_of_birth):
-    #    if datetime.now() - date_of_birth.data < 0:
-    #        raise ValidationError('Date of birth cannot be from after todays date.')
+    def validate_date_of_birth(self, date_of_birth):
+        if date.today() <= date_of_birth.data:
+            raise ValidationError('Date of birth must be before todays date.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email',validators=[DataRequired(),Email()])
@@ -50,3 +49,7 @@ class SetHomeworkForm(FlaskForm):
     due_date = DateField('Due Date', validators=[DataRequired()])
     notes = TextAreaField('Notes', validators=[DataRequired()])
     submit = SubmitField('Set Homework')
+
+    def validate_due_date(self, due_date):
+        if date.today() >= due_date.data:
+            raise ValidationError('Due date must be after todays date.')

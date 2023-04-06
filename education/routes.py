@@ -1,6 +1,6 @@
 from flask import render_template, url_for, request, redirect, flash
 from education import app, db, mail
-from education.models import User, users_roles, Role, TeachingClass, class_student, Activity
+from education.models import User, users_roles, Role, TeachingClass, class_student, Activity, Homework
 from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
@@ -16,7 +16,7 @@ def before_request():
     if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         flash("You must be logged in to view this page")
         return redirect(url_for('login'))
-    if "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework']:
+    if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework']:
         flash("You must be a teacher to view this page")
         return redirect(url_for('home'))
     if request.path.startswith('/admin/'):
@@ -197,9 +197,16 @@ def new_class():
         return redirect(url_for('home'))
     return render_template('new_class.html', pupils=pupils, form=form)
     
-@app.route("/set_homework", methods=['GET', 'POST'])
+@app.route("/set_homework/<int:class_id>", methods=['GET', 'POST'])
 @login_required
-def set_homework():
+def set_homework(class_id):
     form = SetHomeworkForm()
     form.activities.choices = [(activity.id, activity.name) for activity in Activity.query.all()]
+    if form.validate_on_submit():
+        print(form.activities.data)
+        homework = Homework(due_date = form.due_date.data, notes = form.notes.data, class_id = class_id, activity_id = form.activities.data)
+        db.session.add(homework)
+        db.session.commit()
+        flash("Homework set successfully!")
+        return redirect(url_for('home'))
     return render_template('set_homework.html', form=form)
