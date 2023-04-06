@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Set Homework</h1>
+
+    <form method="POST">
+        {{ form.csrf_token }}
+
+        <p>{{ form.due_date.label }}:</p>
+        {{ form.due_date }}
+        {% for error in form.due_date.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+
+        <p>{{ form.activities.label }}:</p>
+        {{ form.activities }} 
+        <br>
+
+        <p>{{ form.notes.label }}:</p>
+        {{ form.notes }}
+        <br>
+
+        {{ form.submit }}
+        {% for pupil in pupils %}
+            <p>{{pupil.class_student}}</p>
+        {% endfor %}
+    </form>
+{% endblock %}

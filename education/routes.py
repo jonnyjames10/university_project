@@ -1,7 +1,7 @@
 from flask import render_template, url_for, request, redirect, flash
 from education import app, db, mail
-from education.models import User, users_roles, Role, TeachingClass, class_student
-from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm
+from education.models import User, users_roles, Role, TeachingClass, class_student, Activity
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
@@ -16,6 +16,9 @@ def before_request():
     if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         flash("You must be logged in to view this page")
         return redirect(url_for('login'))
+    if "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework']:
+        flash("You must be a teacher to view this page")
+        return redirect(url_for('home'))
     if request.path.startswith('/admin/'):
         if not current_user.is_authenticated or "admin" not in current_user.role:
             flash("You must be an admin to view this page")
@@ -119,8 +122,6 @@ def primary_school():
 
 @app.route("/primary_school/cyberbullying")
 def cyberbullying():
-    #if current_user.is_anonymous:
-        #return redirect(url_for('login'))
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
     return render_template('primary_school/cyberbullying.html', notes=notes)
@@ -165,20 +166,13 @@ def a_level():
 @app.route("/teacher_home")
 @login_required
 def teacher_home():
-    if "teacher" in current_user.role:
-        classes = TeachingClass.query.filter_by(teacher_user=current_user.id)
-        return render_template('teacher_home.html', classes=classes)
-    else:
-        flash("You must be a teacher to access this page")
-        return redirect(url_for('home'))
+    classes = TeachingClass.query.filter_by(teacher_user=current_user.id)
+    return render_template('teacher_home.html', classes=classes)
     
 @app.route("/view_class/<int:class_id>")
 @login_required
 def view_class(class_id):
     t_class = TeachingClass.query.get_or_404(class_id)
-    if "teacher" not in current_user.role:
-        flash("You must be a teacher to access this page")
-        return redirect(url_for('home'))
     if current_user.id != t_class.teacher_user:
         flash("You must be the teacher of this class to access this page")
         return redirect(url_for('home'))
@@ -188,21 +182,24 @@ def view_class(class_id):
 @app.route("/new_class", methods=['GET', 'POST'])
 @login_required
 def new_class():
-    if "teacher" not in current_user.role:
-        flash("You must be a teacher to access this page")
-        return redirect(url_for('home'))
-    else:
-        school = current_user.school
-        pupils = User.query.filter(User.school == school) # User goes to the same school and has the role 'student'
-        form = NewClassForm()
-        form.students.choices = [(user.id, user.first_name + " " + user.last_name) for user in User.query.filter(User.school == school)]
-        if form.validate_on_submit():
-            class_add = TeachingClass(name = form.name.data, teacher_user = current_user.id)
-            db.session.add(class_add)
+    school = current_user.school
+    pupils = User.query.filter(User.school == school) # User goes to the same school and has the role 'student'
+    form = NewClassForm()
+    form.students.choices = [(user.id, user.first_name + " " + user.last_name) for user in User.query.filter(User.school == school)]
+    if form.validate_on_submit():
+        class_add = TeachingClass(name = form.name.data, teacher_user = current_user.id)
+        db.session.add(class_add)
+        db.session.commit()
+        for i in range(0, len(form.students.data)):
+            user = User.query.get_or_404(form.students.data[i])
+            user.classes.append(class_add)
             db.session.commit()
-            for i in range(0, len(form.students.data)):
-                user = User.query.get_or_404(form.students.data[i])
-                user.classes.append(class_add)
-                db.session.commit()
-            return redirect(url_for('home'))
-        return render_template('new_class.html', pupils=pupils, form=form)
+        return redirect(url_for('home'))
+    return render_template('new_class.html', pupils=pupils, form=form)
+    
+@app.route("/set_homework", methods=['GET', 'POST'])
+@login_required
+def set_homework():
+    form = SetHomeworkForm()
+    form.activities.choices = [(activity.id, activity.name) for activity in Activity.query.all()]
+    return render_template('set_homework.html', form=form)

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField, TextAreaField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
 from datetime import datetime, timedelta
@@ -44,3 +44,9 @@ class NewClassForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     students = SelectMultipleField('Students', choices=[], validators=[DataRequired()], coerce=int)
     submit = SubmitField('Create')
+
+class SetHomeworkForm(FlaskForm):
+    activities = SelectField('Activity', choices=[], validators=[DataRequired()], coerce=int)
+    due_date = DateField('Due Date', validators=[DataRequired()])
+    notes = TextAreaField('Notes', validators=[DataRequired()])
+    submit = SubmitField('Set Homework')
