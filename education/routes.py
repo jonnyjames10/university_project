@@ -176,10 +176,7 @@ def view_class(class_id):
     if current_user.id != t_class.teacher_user:
         flash("You must be the teacher of this class to access this page")
         return redirect(url_for('home'))
-    #students = User.query.filter_by(class_id in User.classes)
     students = User.query.filter(User.classes.any(id=class_id)).all()
-    #students = User.query.filter(User.classes.contains(t_class.id))
-    #students = User.classes.has(t_class)
     return render_template('view_class.html', t_class=t_class, students=students)
     
 @app.route("/new_class", methods=['GET', 'POST'])
