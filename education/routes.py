@@ -1,7 +1,7 @@
 from flask import render_template, url_for, request, redirect, flash
 from education import app, db, mail
-from education.models import User, users_roles, Role
-from education.forms import RegistrationForm, LoginForm, PointsForm
+from education.models import User, users_roles, Role, TeachingClass, class_student
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
@@ -165,7 +165,7 @@ def teacher_home():
         flash("You must be a teacher to access this page")
         return redirect(url_for('home'))
     
-@app.route("/new_class")
+@app.route("/new_class", methods=['GET', 'POST'])
 @login_required
 def new_class():
     if "teacher" not in current_user.role:
@@ -174,10 +174,16 @@ def new_class():
     else:
         school = current_user.school
         pupils = User.query.filter(User.school == school) # User goes to the same school and has the role 'student'
-        return render_template('new_class.html', pupils=pupils)
-    
-#@app.route("create_class/<int:teacher_id>/<students array")
-#@login_required
-#def create_class(teacher_id, student array):
-#   class = Class(name = form.name.data)
-
+        form = NewClassForm()
+        form.students.choices = [(user.id, user.first_name + " " + user.last_name) for user in User.query.filter(User.school == school)]
+        if form.validate_on_submit():
+            class_add = TeachingClass(name = form.name.data, teacher_user = current_user.id)
+            db.session.add(class_add)
+            db.session.commit()
+            print(form.students.data)
+            for i in range(0, len(form.students.data)):
+                user = User.query.get_or_404(form.students.data[i])
+                user.classes.append(class_add)
+                db.session.commit()
+            return redirect(url_for('home'))
+        return render_template('new_class.html', pupils=pupils, form=form)

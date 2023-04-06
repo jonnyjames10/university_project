@@ -1,7 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Create a new class</h1>
-    {% for pupil in pupils %}
-        <p>{{ pupil.first_name }} {{pupil.last_name}}</p>
-    {% endfor %}
+    <form method="POST">
+        {{ form.csrf_token }}
+
+        <p>{{ form.name.label }}:</p>  {{ form.name }} <br>
+        <p>{{ form.students.label }}:</p>
+        {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        {{ form.students }}
+        {% for error in form.students.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        
+        <p>Note: To select multiple users, hold down the Ctrl key (Windows) or Command key (Mac) to select, and click.</p>
+        <br>
+        {{ form.submit }}
+        {% for pupil in pupils %}
+            <p>{{pupil.class_student}}</p>
+        {% endfor %}
+    </form>
+    
 {% endblock %}

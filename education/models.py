@@ -28,11 +28,11 @@ class User(UserMixin, db.Model):
     authenticated = db.Column(db.Boolean, default=False)
     role = db.relationship('Role', secondary=users_roles, backref=db.backref('user', lazy='dynamic'))
     class_teacher = db.relationship('TeachingClass', backref='user', lazy=True)
-    class_student = db.relationship('TeachingClass', secondary=class_student, backref=db.backref('user_student', lazy='dynamic'))
+    classes = db.relationship('TeachingClass', secondary=class_student, backref=db.backref('student', lazy='dynamic'))
     homework_results = db.relationship('HomeworkResult', backref='user', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.id}', {self.email}')"
+        return f"{self.first_name} {self.last_name}"
     
     @property
     def password(self):
