@@ -19,7 +19,7 @@
             <div class="navbar-right">
             {% if current_user.is_authenticated %}
                 <p>Welcome, {{ current_user.first_name }} | Points: {{ current_user.points }}</p>
-                {% if current_user.role == ["admin"] %}
+                {% if "admin" in current_user.role %}
                     <div class="navbar_item">
                         <form action="{{ url_for('admin.index') }}">
                             <button class="admin">Admin</button>

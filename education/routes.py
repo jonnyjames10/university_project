@@ -7,6 +7,11 @@ from education.authentication import generate_confirmation_token, verify_confirm
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 
+def check_for_admin(*args, **kw):
+    if request.path.startswith('/admin/'):
+        if ():
+            return redirect(url_for('login_form'))
+
 @app.before_request
 def before_request():
     if current_user.is_authenticated and not current_user.authenticated and \
@@ -14,6 +19,10 @@ def before_request():
         return redirect(url_for('unconfirmed'))
     if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         return redirect(url_for('login'))
+    if request.path.startswith('/admin/'):
+        if "admin" not in current_user.role:
+            flash("You must be an admin to view this page")
+            return redirect(url_for('home'))
 
 @app.route("/")
 @app.route("/home")

@@ -33,6 +33,10 @@ button {
         Arial, sans-serif;
 }
 
+li {
+    color: white;
+}
+
 a:link {
     text-decoration: none;
 }

@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Teacher Admin Page</h1>
-    <p>Select a Class:</p>
+    <h3>Select a Class:</h3>
     <!--Display list of classes under the teacher's ID-->
     {% for class in classes %}
         <div class="navbar_item">
@@ -13,8 +13,8 @@
     {% endfor %}
 
     <hr>
-    <br>
-
+    
+    <h3>Create a New Class</h3>
     <!--New class button-->
     <div class="navbar_item">
         <form action="{{ url_for('new_class') }}">

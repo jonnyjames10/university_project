@@ -4,8 +4,10 @@
     <h3>Class name: {{ t_class.name }}</h3>
 
     <p>Students of class:</p>
+    <ul>
     {% for student in students %}
-        <p>{{ student.first_name }} {{student.last_name}}</p>
+        <li><p>{{ student.first_name }} {{student.last_name}}</p></li>
     {% endfor %}
+    </ul>
     <p>Date and time created: {{ t_class.date_created }}</p>
 {% endblock %}
