@@ -434,3 +434,15 @@ video {
     opacity: 0.6;
     transition: 0.3s;
 }
+
+.hw_list {
+    border: 1px solid #ffffff;
+    border-radius: 40px;
+    padding: 5px 20px 5px 20px;
+    border-radius: 9px;
+    box-sizing: border-box;
+    width: 97vw;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}

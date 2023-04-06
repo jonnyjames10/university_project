@@ -210,3 +210,28 @@ def set_homework(class_id):
         flash("Homework set successfully!")
         return redirect(url_for('home'))
     return render_template('set_homework.html', form=form)
+
+@app.route("/homework")
+@login_required
+def homework():
+    user = User.query.get_or_404(current_user.id)
+    classes = user.classes
+    homework_obj = []
+    for cl in classes:
+        homework_obj.append(cl.homeworks)
+    homeworks = []
+    for h in homework_obj:
+        for hw in range(0, len(h)+1):
+            if hw:
+                homeworks.append(Homework.query.get(hw))
+    activities = []
+    for hw in homeworks:
+        if hw:
+            activities.append(Activity.query.get(hw.activity_id))
+    complete_hw = []
+    i=0
+    for hw in range(len(homeworks)+1):
+        if hw:
+            complete_hw.append([Homework.query.get(hw), activities[i]])
+            i+=1
+    return render_template('homework.html', complete_hw=complete_hw)

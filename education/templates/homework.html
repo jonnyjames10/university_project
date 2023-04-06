@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Homework</h1>
+
+    {% for hw in complete_hw %}
+        {% if hw %}
+            <div class="hw_list">
+                <p>Date due: {{hw[0].due_date}} | Notes: {{ hw[0].notes }} | {{ hw[1].name }}</p>
+                <div class="navbar_item">
+                    <form action="#">
+                        <button class="profile" style="width: 25vw;">Complete Homework</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}

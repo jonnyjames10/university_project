@@ -33,6 +33,13 @@
                         </form>
                     </div>
                 {% endif %}
+                {% if "student" in current_user.role %}
+                    <div class="navbar_item">
+                        <form action="{{ url_for('homework') }}">
+                            <button class="profile">Homework</button>
+                        </form>
+                    </div>
+                {% endif %}
                 <div class="navbar_item">
                     <form action="{{ url_for('profile') }}">
                         <button class="profile">Profile</button>
