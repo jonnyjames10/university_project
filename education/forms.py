@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField
-from wtforms_alchemy import  QuerySelectMultipleField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
 from datetime import datetime, timedelta

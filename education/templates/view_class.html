@@ -10,4 +10,10 @@
     {% endfor %}
     </ul>
     <p>Date and time created: {{ t_class.date_created }}</p>
+    <br>
+    <div class="navbar_item">
+        <form action="{{ url_for('teacher_home') }}">
+            <button class="register" style="width:15vw">Back</button>
+        </form>
+    </div>
 {% endblock %}

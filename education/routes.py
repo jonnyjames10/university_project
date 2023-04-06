@@ -7,11 +7,6 @@ from education.authentication import generate_confirmation_token, verify_confirm
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
 
-def check_for_admin(*args, **kw):
-    if request.path.startswith('/admin/'):
-        if ():
-            return redirect(url_for('login_form'))
-
 @app.before_request
 def before_request():
     if current_user.is_authenticated and not current_user.authenticated and \
@@ -205,7 +200,6 @@ def new_class():
             class_add = TeachingClass(name = form.name.data, teacher_user = current_user.id)
             db.session.add(class_add)
             db.session.commit()
-            print(form.students.data)
             for i in range(0, len(form.students.data)):
                 user = User.query.get_or_404(form.students.data[i])
                 user.classes.append(class_add)
