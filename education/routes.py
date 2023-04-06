@@ -16,11 +16,13 @@ def check_for_admin(*args, **kw):
 def before_request():
     if current_user.is_authenticated and not current_user.authenticated and \
         request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
+        flash("Please verify your email first")
         return redirect(url_for('unconfirmed'))
     if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
+        flash("You must be logged in to view this page")
         return redirect(url_for('login'))
     if request.path.startswith('/admin/'):
-        if "admin" not in current_user.role:
+        if not current_user.is_authenticated or "admin" not in current_user.role:
             flash("You must be an admin to view this page")
             return redirect(url_for('home'))
 
