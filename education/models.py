@@ -61,6 +61,7 @@ class TeachingClass(db.Model):
     name = db.Column(db.String(100), nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     teacher_user = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    students = db.relationship('User', secondary=class_student, backref=db.backref('t_class', lazy='dynamic'))
     homeworks = db.Relationship('Homework', backref='teaching_class', lazy=True)
 
 class Homework(db.Model):

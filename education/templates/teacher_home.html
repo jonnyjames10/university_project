@@ -3,11 +3,22 @@
     <h1>Teacher Admin Page</h1>
     <p>Select a Class:</p>
     <!--Display list of classes under the teacher's ID-->
+    {% for class in classes %}
+        <div class="navbar_item">
+            <form action="{{ url_for('view_class', class_id=class.id) }}">
+                <button class="profile">{{ class.name }} | Date created: {{ class.date_created }}</button>
+            </form>
+        </div>
+        <br>
+    {% endfor %}
+
+    <hr>
+    <br>
 
     <!--New class button-->
     <div class="navbar_item">
         <form action="{{ url_for('new_class') }}">
-            <button class="profile">New Class</button>
+            <button class="register" style="width:15vw">New Class</button>
         </form>
     </div>
 {% endblock %}

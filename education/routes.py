@@ -160,10 +160,27 @@ def a_level():
 @login_required
 def teacher_home():
     if "teacher" in current_user.role:
-        return render_template('teacher_home.html')
+        classes = TeachingClass.query.filter_by(teacher_user=current_user.id)
+        return render_template('teacher_home.html', classes=classes)
     else:
         flash("You must be a teacher to access this page")
         return redirect(url_for('home'))
+    
+@app.route("/view_class/<int:class_id>")
+@login_required
+def view_class(class_id):
+    t_class = TeachingClass.query.get_or_404(class_id)
+    if "teacher" not in current_user.role:
+        flash("You must be a teacher to access this page")
+        return redirect(url_for('home'))
+    if current_user.id != t_class.teacher_user:
+        flash("You must be the teacher of this class to access this page")
+        return redirect(url_for('home'))
+    #students = User.query.filter_by(class_id in User.classes)
+    students = User.query.filter(User.classes.any(id=class_id)).all()
+    #students = User.query.filter(User.classes.contains(t_class.id))
+    #students = User.classes.has(t_class)
+    return render_template('view_class.html', t_class=t_class, students=students)
     
 @app.route("/new_class", methods=['GET', 'POST'])
 @login_required

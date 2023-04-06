@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>View Class</h1>
+    <h3>Class name: {{ t_class.name }}</h3>
+
+    <p>Students of class:</p>
+    {% for student in students %}
+        <p>{{ student.first_name }} {{student.last_name}}</p>
+    {% endfor %}
+    <p>Date and time created: {{ t_class.date_created }}</p>
+{% endblock %}
