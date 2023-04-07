@@ -1,11 +1,13 @@
 from flask import render_template, url_for, request, redirect, flash
 from education import app, db, mail
-from education.models import User, users_roles, Role, TeachingClass, class_student, Activity, Homework
+from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult
 from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
+import datetime
+from datetime import datetime, timedelta
 
 @app.before_request
 def before_request():
@@ -211,27 +213,42 @@ def set_homework(class_id):
         return redirect(url_for('home'))
     return render_template('set_homework.html', form=form)
 
-@app.route("/homework")
-@login_required
-def homework():
-    user = User.query.get_or_404(current_user.id)
-    classes = user.classes
+def homework_helper(classes):
     homework_obj = []
     for cl in classes:
-        homework_obj.append(cl.homeworks)
+        homework_obj.append(cl.homeworks) # Add homework objects from class to list
     homeworks = []
     for h in homework_obj:
         for hw in range(0, len(h)+1):
-            if hw:
-                homeworks.append(Homework.query.get(hw))
+            if h:
+                homeworks.append(Homework.query.get(hw)) # Add homeworks from the object to a list
     activities = []
     for hw in homeworks:
         if hw:
             activities.append(Activity.query.get(hw.activity_id))
     complete_hw = []
     i=0
-    for hw in range(len(homeworks)+1):
-        if hw:
+    print(activities)
+    for hw in range(0, len(homeworks)):
+        if Homework.query.get(hw):
             complete_hw.append([Homework.query.get(hw), activities[i]])
             i+=1
-    return render_template('homework.html', complete_hw=complete_hw)
+    return complete_hw
+
+@app.route("/homework")
+@login_required
+def homework():
+    user = User.query.get_or_404(current_user.id) #User ID
+    classes = user.classes #Get user's classes
+    complete_hw = homework_helper(classes)
+    hw_completed = []
+    completed_id = []
+    for i in user.homework_results:
+        if i:
+            hw_completed.append(HomeworkResult.query.get(i.id))
+    for i in hw_completed:
+        completed_id.append(i.id)
+    date_today = datetime.today()
+    date_tmrw = date_today.date() + timedelta(days=1)
+    return render_template('homework.html', complete_hw=complete_hw, 
+                           completed_id=completed_id, date_tmrw=date_tmrw)
