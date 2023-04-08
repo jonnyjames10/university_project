@@ -9,34 +9,39 @@
     </div>
     <div class="main">
         <h1>Cyberbullying</h1>
+        {% if session['activity_type'] %}
+            <!-- Where the div class contains activity_type, also add 'content_inside_active' -->
+            <h3>Navigate to the homework you were given</h3>
+        {% endif %}
         <div id="content">
-            <div class="content_inside">
+            <div id="notes" class="content_inside">
                 <pre>{{ notes }}</pre>
                 <hr>
-                <p>1) Questions can then go here:</p>
-                <form>
-                    <input type="radio" id="a1" name="#"><label for="a1">Answer 1</label></br>
-                    <input type="radio" id="a2" name="#"><label for="a2">Answer 2</label></br>
-                    <input type="radio" id="a3" name="#"><label for="a3">Answer 3</label></br>
-                    <input type="radio" id="a4" name="#"><label for="a4">Answer 4</label></br>
-                    <input type="submit" value="Submit" style="margin-left: 20px">
+                <form method="POST">
+                    {{ notes_form.csrf_token }}
+                    <p>{{ notes_form.q1.label }}:</p>
+                    {% for i in notes_questions %}
+                        <p>{{ i }}</p>
+                        <p>{{ notes_form.q1 }}</p>
+                    {% endfor %}
+                    {{ notes_form.submit }}
                 </form>
             </div>
-            <div class="content_inside">
+            <div id="video" class="content_inside">
                 <h3>This section will hold a video with a demo or walkthrough of a task</h3>
                 <video controls>
                     <source src={{ url_for('static', filename="videos/demo.mp4") }} type="video/mp4">
                 Your browser does not support the video tag.
                 </video>
             </div>
-            <div class="content_inside">
+            <div id="game" class="content_inside">
                 <h3>A JavaScript game will go here</h3>
                 <p>They will be asked questions, and given 50 points if they get it correct</p>
                 <p>The amount of time left to answer the question will used:</p>
                 <p>Points awarded = 50 * (time_left / total_time)</p>
                 <p>Click on <a href="{{ url_for('cyberbullying_pong') }}">this link</a> to go to the game</p>
             </div>
-            <div class="content_inside">
+            <div id="test" class="content_inside">
                 <h3>A test will go here</h3>
                 <p>Will be a larger version of the questions given in the text section</p>
                 <p>Will get a certain number of points given for each question</p>

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField, TextAreaField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, HiddenField, DateField, SelectMultipleField, TextAreaField, SelectField, RadioField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp, InputRequired, Optional, NumberRange
 from education.models import User
 from datetime import datetime, timedelta, date
@@ -53,3 +53,8 @@ class SetHomeworkForm(FlaskForm):
     def validate_due_date(self, due_date):
         if date.today() >= due_date.data:
             raise ValidationError('Due date must be after todays date.')
+
+class CyberbullyingNotesForm(FlaskForm):
+    q1 = RadioField('Question 1', choices=[], validators=[DataRequired()])
+    activity_id = 1
+    submit = SubmitField('Submit')

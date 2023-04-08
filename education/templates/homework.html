@@ -5,18 +5,18 @@
     {% for hw in complete_hw %}
         {% if hw %}
             <div class="hw_list">
-                <p>Date due: {{hw[0].due_date}} | Notes: {{ hw[0].notes }} | {{ hw[1].name }} | {{ hw[0].id }}</p>
+                <p>Date due: {{hw[0].due_date}} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }} {{ hw[1].id }}</p>
                 <div class="navbar_item">
                     {% if hw[0].id in completed_id %}
                         <form action="#">
                             <button class="profile" style="width: 25vw; background-color: green; text-transform: uppercase;">Completed</button>
                         </form>
                     {% elif hw[0].id not in completed_hw_id and hw[0].due_date.date() <= date_tmrw %}
-                        <form action="#">
+                        <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
                             <button class="profile" style="width: 25vw; background-color: red; text-transform: uppercase;">Due Soon</button>
                         </form>
                     {% else %}
-                        <form action="#">
+                        <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
                             <button class="profile" style="width: 25vw;">Complete Homework</button>
                         </form>
                     {% endif %}

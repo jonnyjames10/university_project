@@ -1,13 +1,16 @@
-from flask import render_template, url_for, request, redirect, flash
+from flask import render_template, url_for, request, redirect, flash, session
 from education import app, db, mail
-from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult
-from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm
+from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult, ActivityType
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, CyberbullyingNotesForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_mail import Message
+from flask_session import Session
 import datetime
 from datetime import datetime, timedelta
+import random
+import copy
 
 @app.before_request
 def before_request():
@@ -104,6 +107,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
+            session['homework'] = False
             return redirect(url_for('home'))
     return render_template('login.html', title='Login', form=form)
 
@@ -122,11 +126,59 @@ def profile():
 def primary_school():
     return render_template('primary_school.html')
 
-@app.route("/primary_school/cyberbullying")
+cb_notes_questions = {
+    'Which is the correct answer?':['This one', 'Not this one', 'Nope', 'Nah']
+}
+
+def shuffle(q):
+    selected_keys = []
+    i = 0
+    q_keys = list(q.keys())
+    while i < len(q_keys):
+        selection = random.choice(q_keys)
+        if selection not in selected_keys:
+            selected_keys.append(selection)
+            i+=1
+    return selected_keys
+
+def set_answers(form, question, answers):
+#    for i in range(0, len(question)):
+    form.q1.choices = [(ans, ans) for ans in answers[question[0]]]
+    form.q2.choices = [(ans, ans) for ans in answers[question[1]]]
+    form.q3.choices = [(ans, ans) for ans in answers[question[2]]]
+    form.q4.choices = [(ans, ans) for ans in answers[question[3]]]
+    form.q5.choices = [(ans, ans) for ans in answers[question[4]]]
+
+#def check_answers(form, questions, answers):
+
+
+@app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
+@login_required
 def cyberbullying():
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
-    return render_template('primary_school/cyberbullying.html', notes=notes)
+    notes_form = CyberbullyingNotesForm()
+    # video_form = VideoForm()
+    # test_form = TestForm()
+    cb_notes_copy_questions = copy.deepcopy(cb_notes_questions) # Copy the questions
+    shuffled_notes_questions = shuffle(cb_notes_copy_questions) # Shuffle the keys of the questions
+    for i in cb_notes_copy_questions.keys():
+        random.shuffle(cb_notes_copy_questions[i]) # Shuffle the answers
+    #set_answers(notes_form, (shuffled_notes_questions), cb_notes_copy_questions)
+    notes_form.q1.choices = [(answer, answer) for answer in cb_notes_copy_questions[shuffled_notes_questions[0]]]
+    if notes_form.validate_on_submit():
+        correct = 0 # check_answers()
+        if notes_form.q1.data == cb_notes_questions[shuffled_notes_questions[0]][0]:
+            correct += 1
+        flash("You got " + str(correct) + " correct")
+        #TODO:
+            # Allocate points
+        if session['homework'] == True and notes_form.activity_id == session['activity_id']:
+            flash("Homework complete")
+            end_homework(correct, current_user.id)
+        return redirect(url_for('cyberbullying'))
+    return render_template('primary_school/cyberbullying.html', notes=notes, notes_questions=shuffled_notes_questions, 
+                           notes_answers=cb_notes_copy_questions, notes_form=notes_form)
 
 @app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
 @login_required
@@ -225,13 +277,12 @@ def homework_helper(classes):
     activities = []
     for hw in homeworks:
         if hw:
-            activities.append(Activity.query.get(hw.activity_id))
+            activities.append(Activity.query.get(hw.activity_id)) # Find the activities for each homework
     complete_hw = []
     i=0
-    print(activities)
     for hw in range(0, len(homeworks)):
         if Homework.query.get(hw):
-            complete_hw.append([Homework.query.get(hw), activities[i]])
+            complete_hw.append([Homework.query.get(hw), activities[i]]) # Put them into a same list
             i+=1
     return complete_hw
 
@@ -252,3 +303,26 @@ def homework():
     date_tmrw = date_today.date() + timedelta(days=1)
     return render_template('homework.html', complete_hw=complete_hw, 
                            completed_id=completed_id, date_tmrw=date_tmrw)
+
+@app.route("/completing_homework/<int:activity_id>/<int:homework_id>")
+@login_required
+def completing_homework(activity_id, homework_id):
+    session['homework'] = True
+    activity = Activity.query.get_or_404(activity_id)
+    session['activity_id'] = activity.id
+    # Get the activity type id and set to a variable
+    act_type = ActivityType.query.get(activity.activity_type_id)
+    session['activity_type'] = act_type.id
+    session['homework_id'] = homework_id
+    return redirect(url_for(activity.url_link))
+
+def end_homework(mark, user_id):
+    # Need to write values to homework_result table
+    homework = HomeworkResult(mark=mark, homework_id=session['homework_id'], user_id=user_id)
+    db.session.add(homework)
+    db.session.commit()
+    session.pop('activity_type', None)
+    session.pop('homework', None)
+    session['homework'] = False
+    session.pop('homework_id', None)
+    return redirect(url_for('home'))
