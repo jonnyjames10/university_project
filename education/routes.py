@@ -310,14 +310,12 @@ def completing_homework(activity_id, homework_id):
     session['homework'] = True
     activity = Activity.query.get_or_404(activity_id)
     session['activity_id'] = activity.id
-    # Get the activity type id and set to a variable
     act_type = ActivityType.query.get(activity.activity_type_id)
     session['activity_type'] = act_type.id
     session['homework_id'] = homework_id
     return redirect(url_for(activity.url_link))
 
 def end_homework(mark, user_id):
-    # Need to write values to homework_result table
     homework = HomeworkResult(mark=mark, homework_id=session['homework_id'], user_id=user_id)
     db.session.add(homework)
     db.session.commit()
