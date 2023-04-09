@@ -5,6 +5,10 @@
     <form method="POST">
         {{ form.csrf_token }}
 
+        <p>{{ form.title.label }}:</p>
+        {{ form.title }} 
+        <br>
+
         <p>{{ form.due_date.label }}:</p>
         {{ form.due_date }}
         {% for error in form.due_date.errors %}

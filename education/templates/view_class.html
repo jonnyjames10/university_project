@@ -28,7 +28,7 @@
     <h3>Homeworks Set</h3>
     {% for hw in homeworks %}
         <div class="hw_list">
-            <p>Due date: {{ hw.due_date.date() }} | Notes: {{ hw.notes }}</p>
+            <p>Title: {{hw.title}} | Due date: {{ hw.due_date.date() }}{% if hw.notes|length > 0 %} | Notes: {{ hw.notes }}{% endif %}</p>
             <form action="{{ url_for('view_homework', homework_id=hw.id) }}">
                 <button class="profile" style="width: 25vw; text-transform: uppercase;">View results</button>
             </form>

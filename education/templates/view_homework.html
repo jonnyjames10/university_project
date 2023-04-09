@@ -1,17 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>View Homework</h1>
-    <p>{{ homework.due_date.date() }}</p>
-    <p>{{ homework.notes }}</p>
+    <h3>Title: {{homework.title}} | Due date: {{ homework.due_date.date() }}{% if homework.notes|length > 0 %} | Notes: {{ homework.notes }}{% endif %}</h3>
     <br>
-    {% for result in homework_results %}
-        <div class="hw_list">
+    <table class="homework_result_table" style="width: 50vw; margin-left: auto; margin-right: auto; border: 1px solid white;">
+        <tr style="border: 1px solid white">
+            <th style="width: 70%;">Student</th>
+            <th style="width: 30%;">Mark</th>
+        </tr>
+        {% for result in homework_results %}
+        <tr style="text-align: center; border: 1px solid white">
             {% for student in students if student.id == result.user_id %}
-                <p>Student: {{ student.first_name }} {{ student.last_name }}</p>
+                <td style="text-align: center; border: 1px solid white"><p>{{ student.first_name }} {{ student.last_name }}</p></td>
             {% endfor %}
-            <p>Mark: {{ result.mark }} | User ID: {{ result.user_id }}</p>
-            <p>{{ result.id }}</p>
-        </div>
-        <br>
+            <td style="text-align: center; border: 1px solid white"><p>{{ result.mark }}</p></td>
+        </tr>
     {% endfor %}
+    <table>
 {% endblock %}

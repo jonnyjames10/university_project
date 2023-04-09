@@ -46,8 +46,9 @@ class NewClassForm(FlaskForm):
 
 class SetHomeworkForm(FlaskForm):
     activities = SelectField('Activity', choices=[], validators=[DataRequired()], coerce=int)
+    title = StringField('Title', validators=[DataRequired()])
     due_date = DateField('Due Date', validators=[DataRequired()])
-    notes = TextAreaField('Notes', validators=[DataRequired()])
+    notes = TextAreaField('Notes')
     submit = SubmitField('Set Homework')
 
     def validate_due_date(self, due_date):
@@ -56,5 +57,9 @@ class SetHomeworkForm(FlaskForm):
 
 class CyberbullyingNotesForm(FlaskForm):
     q1 = RadioField('Question 1', choices=[], validators=[DataRequired()])
+    #q2 = RadioField('Question 2', choices=[], validators=[DataRequired()])
+    #q3 = RadioField('Question 3', choices=[], validators=[DataRequired()])
+    #q4 = RadioField('Question 4', choices=[], validators=[DataRequired()])
+    #q5 = RadioField('Question 5', choices=[], validators=[DataRequired()])
     activity_id = 1
     submit = SubmitField('Submit')

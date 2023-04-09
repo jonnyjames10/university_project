@@ -271,7 +271,7 @@ def set_homework(class_id):
     form.activities.choices = [(activity.id, activity.name) for activity in Activity.query.all()]
     if form.validate_on_submit():
         print(form.activities.data)
-        homework = Homework(due_date = form.due_date.data, notes = form.notes.data, class_id = class_id, activity_id = form.activities.data)
+        homework = Homework(title=form.title.data, due_date = form.due_date.data, notes = form.notes.data, class_id = class_id, activity_id = form.activities.data)
         db.session.add(homework)
         db.session.commit()
         flash("Homework set successfully!")

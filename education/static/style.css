@@ -354,6 +354,12 @@ a:link {
     margin-right: auto;
 }
 
+.homework_result_table { 
+    margin-left: 10%;
+    margin-right: 10%;
+    align-self: center;
+}
+
 .leaderboard td, th {
     font-weight: 500;
     border-radius: 40px;
@@ -365,7 +371,6 @@ a:link {
     font-size: 18px;
     height: 20px;
     outline: 0;
-    width: 100%;
     padding: 10px;
 }
 

@@ -65,6 +65,7 @@ class TeachingClass(db.Model):
 
 class Homework(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100), nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
     notes = db.Column(db.Text)
     class_id = db.Column(db.Integer, db.ForeignKey('teaching_class.id'), nullable=False)
