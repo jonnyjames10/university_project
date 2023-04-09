@@ -5,7 +5,7 @@
     {% for hw in complete_hw %}
         {% if hw %}
             <div class="hw_list">
-                <p>Date due: {{hw[0].due_date}} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }} {{ hw[1].id }}</p>
+                <p>Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }} | ID: {{ hw[1].id }}</p>
                 <div class="navbar_item">
                     {% if hw[0].id in completed_id %}
                         <form action="#">

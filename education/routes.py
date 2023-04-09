@@ -113,6 +113,10 @@ def login():
 
 @app.route("/logout")
 def logout():
+    session.pop('activity_type', None)
+    session.pop('homework', None)
+    session['homework'] = False
+    session.pop('homework_id', None)
     logout_user()
     return redirect(url_for('home'))
 
@@ -121,6 +125,12 @@ def logout():
 def profile():
     user = User.query.get_or_404(current_user.id)
     return render_template('profile.html', user=user)
+
+def assign_points(user_id, points):
+    user = User.query.get_or_404(user_id)
+    user.points += int(points)
+    db.session.add(user)
+    db.session.commit()
 
 @app.route("/primary_school")
 def primary_school():
@@ -149,8 +159,16 @@ def set_answers(form, question, answers):
     form.q4.choices = [(ans, ans) for ans in answers[question[3]]]
     form.q5.choices = [(ans, ans) for ans in answers[question[4]]]
 
-#def check_answers(form, questions, answers):
+#TODO:
+def check_answers(form, questions, answers):
+    correct = 0
+    if form.q1.data == answers[questions[0]][0]:
+        correct += 1
+    return correct
 
+def flash_results(correct, points):
+    flash("You got " + str(correct) + " correct")
+    flash("You got " + str(points) + " points")
 
 @app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
 @login_required
@@ -167,12 +185,9 @@ def cyberbullying():
     #set_answers(notes_form, (shuffled_notes_questions), cb_notes_copy_questions)
     notes_form.q1.choices = [(answer, answer) for answer in cb_notes_copy_questions[shuffled_notes_questions[0]]]
     if notes_form.validate_on_submit():
-        correct = 0 # check_answers()
-        if notes_form.q1.data == cb_notes_questions[shuffled_notes_questions[0]][0]:
-            correct += 1
-        flash("You got " + str(correct) + " correct")
-        #TODO:
-            # Allocate points
+        correct = check_answers(notes_form, shuffled_notes_questions, cb_notes_questions)
+        flash_results(correct, int(correct*10))
+        assign_points(current_user.id, correct*10)
         if session['homework'] == True and notes_form.activity_id == session['activity_id']:
             flash("Homework complete")
             end_homework(correct, current_user.id)
@@ -185,10 +200,7 @@ def cyberbullying():
 def cyberbullying_pong():
     form = PointsForm()
     if form.validate_on_submit():
-        user = User.query.get_or_404(current_user.id)
-        user.points += int(form.dbPoints.data)
-        db.session.add(user)
-        db.session.commit()
+        assign_points(current_user.id, int(form.dbPoints.data))
         return redirect(url_for('cyberbullying'))
     return render_template('primary_school/games/pong.html', form=form)
 
@@ -231,7 +243,8 @@ def view_class(class_id):
         flash("You must be the teacher of this class to access this page")
         return redirect(url_for('home'))
     students = User.query.filter(User.classes.any(id=class_id)).all()
-    return render_template('view_class.html', t_class=t_class, students=students)
+    homeworks = t_class.homeworks
+    return render_template('view_class.html', t_class=t_class, students=students, homeworks=homeworks)
     
 @app.route("/new_class", methods=['GET', 'POST'])
 @login_required
@@ -282,7 +295,8 @@ def homework_helper(classes):
     i=0
     for hw in range(0, len(homeworks)):
         if Homework.query.get(hw):
-            complete_hw.append([Homework.query.get(hw), activities[i]]) # Put them into a same list
+            hwork = Homework.query.get(hw)
+            complete_hw.append([hwork, Activity.query.get(hwork.activity_id)]) # Put them into a same list
             i+=1
     return complete_hw
 
@@ -298,11 +312,21 @@ def homework():
         if i:
             hw_completed.append(HomeworkResult.query.get(i.id))
     for i in hw_completed:
-        completed_id.append(i.id)
+        completed_id.append(i.homework_id)
     date_today = datetime.today()
     date_tmrw = date_today.date() + timedelta(days=1)
     return render_template('homework.html', complete_hw=complete_hw, 
                            completed_id=completed_id, date_tmrw=date_tmrw)
+
+@app.route("/view_homework/<int:homework_id>")
+@login_required
+def view_homework(homework_id):
+    homework = Homework.query.get_or_404(homework_id)
+    homework_results = HomeworkResult.query.filter(HomeworkResult.homework_id == homework_id)
+    students = []
+    for hw in homework_results:
+        students.append(User.query.get_or_404(hw.user_id))
+    return render_template('view_homework.html', homework=homework, homework_results=homework_results, students=students)
 
 @app.route("/completing_homework/<int:activity_id>/<int:homework_id>")
 @login_required

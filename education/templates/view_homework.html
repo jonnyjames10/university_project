@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>View Homework</h1>
+    <p>{{ homework.due_date.date() }}</p>
+    <p>{{ homework.notes }}</p>
+    <br>
+    {% for result in homework_results %}
+        <div class="hw_list">
+            {% for student in students if student.id == result.user_id %}
+                <p>Student: {{ student.first_name }} {{ student.last_name }}</p>
+            {% endfor %}
+            <p>Mark: {{ result.mark }} | User ID: {{ result.user_id }}</p>
+            <p>{{ result.id }}</p>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}

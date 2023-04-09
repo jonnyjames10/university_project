@@ -19,8 +19,20 @@
         </div>
         <div class="navbar_item">
             <form action="{{ url_for('set_homework', class_id=t_class.id) }}">
-                <button class="register" style="width:15vw; float: right;">Set Homework</button>
+                <button class="register" style="width:20vw; float: right;">Set Homework</button>
             </form>
         </div>
     </div>
+    <br><br><br>
+    <hr>
+    <h3>Homeworks Set</h3>
+    {% for hw in homeworks %}
+        <div class="hw_list">
+            <p>Due date: {{ hw.due_date.date() }} | Notes: {{ hw.notes }}</p>
+            <form action="{{ url_for('view_homework', homework_id=hw.id) }}">
+                <button class="profile" style="width: 25vw; text-transform: uppercase;">View results</button>
+            </form>
+        </div>
+        <br>
+    {% endfor %}
 {% endblock %}
