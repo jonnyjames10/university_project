@@ -55,11 +55,10 @@ class SetHomeworkForm(FlaskForm):
         if date.today() >= due_date.data:
             raise ValidationError('Due date must be after todays date.')
 
-class CyberbullyingNotesForm(FlaskForm):
-    q1 = RadioField('Question 1', choices=[], validators=[DataRequired()])
-    #q2 = RadioField('Question 2', choices=[], validators=[DataRequired()])
-    #q3 = RadioField('Question 3', choices=[], validators=[DataRequired()])
-    #q4 = RadioField('Question 4', choices=[], validators=[DataRequired()])
-    #q5 = RadioField('Question 5', choices=[], validators=[DataRequired()])
-    activity_id = 1
+class QuestionForm(FlaskForm):
+    q1 = RadioField('', choices=[], validators=[DataRequired()])
+    q2 = RadioField('', choices=[], validators=[DataRequired()])
+    q3 = RadioField('', choices=[], validators=[DataRequired()])
+    q4 = RadioField('', choices=[], validators=[DataRequired()])
+    q5 = RadioField('', choices=[], validators=[DataRequired()])
     submit = SubmitField('Submit')

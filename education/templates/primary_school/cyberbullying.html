@@ -17,14 +17,18 @@
             <div id="notes" class="content_inside">
                 <pre>{{ notes }}</pre>
                 <hr>
-                <form method="POST">
-                    {{ notes_form.csrf_token }}
-                    <p>{{ notes_form.q1.label }}:</p>
-                    {% for i in notes_questions %}
-                        <p>{{ i }}</p>
-                        <p>{{ notes_form.q1 }}</p>
+                <h3>Questions</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+
+                    {% for field in form %}
+                        {% if field.type == "RadioField" %}
+                            <p>{{ field.label }}</p>
+                            {{ field }}
+                        {% endif %}
                     {% endfor %}
-                    {{ notes_form.submit }}
+
+                    {{ form.submit }}
                 </form>
             </div>
             <div id="video" class="content_inside">

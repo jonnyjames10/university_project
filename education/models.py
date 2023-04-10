@@ -85,6 +85,17 @@ class Activity(db.Model):
     activity_type_id = db.Column(db.Integer, db.ForeignKey('activity_type.id'), nullable=False)
     level_id = db.Column(db.Integer, db.ForeignKey('level.id'), nullable=False)
     homework = db.relationship('Homework', backref='activity', lazy=True)
+    questions = db.relationship('Question', backref='activity', lazy=True)
+
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    a = db.Column(db.String(30), nullable=False)
+    b = db.Column(db.String(30), nullable=False)
+    c = db.Column(db.String(30), nullable=False)
+    d = db.Column(db.String(30), nullable=False)
+    answer = db.Column(db.String(30), nullable=False)
+    activity_id = db.Column(db.Integer, db.ForeignKey('activity.id'), nullable=False)
 
 class ActivityType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
