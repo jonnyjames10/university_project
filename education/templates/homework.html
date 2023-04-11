@@ -1,11 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
     <h1>Homework</h1>
-
     {% for hw in complete_hw %}
         {% if hw %}
             <div class="hw_list">
-                <p>Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
+                <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
                 <div class="navbar_item">
                     {% if hw[0].id in completed_id %}
                         <form action="#">

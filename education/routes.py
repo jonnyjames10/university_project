@@ -204,6 +204,8 @@ def check_answers():
         if int(i) == int(j):
             correct += 1
     results(correct, int(correct*10))
+    if session['homework'] == True:
+        end_homework(correct, current_user.id)
     return redirect(url_for('primary_school'))
 
 @app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
@@ -296,9 +298,10 @@ def homework_helper(classes):
         homework_obj.append(cl.homeworks) # Add homework objects from class to list
     homeworks = []
     for h in homework_obj:
-        for hw in range(0, len(h)+1):
-            if h:
+        if h:
+            for hw in range(0, len(h)+2):
                 homeworks.append(Homework.query.get(hw)) # Add homeworks from the object to a list
+    print(homeworks)
     activities = []
     for hw in homeworks:
         if hw:
@@ -334,11 +337,12 @@ def homework():
 @login_required
 def view_homework(homework_id):
     homework = Homework.query.get_or_404(homework_id)
-    homework_results = HomeworkResult.query.filter(HomeworkResult.homework_id == homework_id)
+    homework_results = HomeworkResult.query.filter(HomeworkResult.homework_id == homework.id)
+    activity = Activity.query.get_or_404(homework.activity_id)
     students = []
     for hw in homework_results:
         students.append(User.query.get_or_404(hw.user_id))
-    return render_template('view_homework.html', homework=homework, homework_results=homework_results, students=students)
+    return render_template('view_homework.html', homework=homework, homework_results=homework_results, students=students, activity=activity)
 
 @app.route("/completing_homework/<int:activity_id>/<int:homework_id>")
 @login_required
@@ -359,4 +363,5 @@ def end_homework(mark, user_id):
     session.pop('homework', None)
     session['homework'] = False
     session.pop('homework_id', None)
+    flash("Homework completed!")
     return redirect(url_for('home'))
