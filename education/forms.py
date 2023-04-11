@@ -61,5 +61,4 @@ class QuestionForm(FlaskForm):
     q3 = RadioField('', choices=[], validators=[DataRequired()])
     q4 = RadioField('', choices=[], validators=[DataRequired()])
     q5 = RadioField('', choices=[], validators=[DataRequired()])
-    dbPoints = HiddenField('dbPoints', validators=[DataRequired()])
     submit = SubmitField('Submit')
