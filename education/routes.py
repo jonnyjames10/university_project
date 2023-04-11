@@ -10,20 +10,24 @@ from flask_session import Session
 import datetime
 from datetime import datetime, timedelta
 import random
-import json
+from sqlalchemy.sql.expression import func
 
 @app.before_request
 def before_request():
+    # If user is logged in but hasn't verified their email
     if current_user.is_authenticated and not current_user.authenticated and \
         request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         flash("Please verify your email first")
         return redirect(url_for('unconfirmed'))
+    # If user is not logged in
     if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
         flash("You must be logged in to view this page")
         return redirect(url_for('login'))
+    # If user is logged in and doesn't have the 'teacher' role
     if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework']:
         flash("You must be a teacher to view this page")
         return redirect(url_for('home'))
+    # If user is not authenticated or have the 'admin' user and tries to access admin pages
     if request.path.startswith('/admin/'):
         if not current_user.is_authenticated or "admin" not in current_user.role:
             flash("You must be an admin to view this page")
@@ -152,11 +156,15 @@ def shuffle(questions):
     return order
 
 def set_answers(form, questions):
+    answers = []
     for field, question in zip(form, questions):
         field.choices = [(question.a, question.a), (question.b, question.b), (question.c, question.c), (question.d, question.d)]
         field.id = question.id
         random.shuffle(field.choices)
         field.label = question.title
+        answers.append(int(question.answer))
+    print(answers)
+    return questions, answers
 
 def results(correct, points):
     flash("You got " + str(correct) + " correct")
@@ -164,48 +172,39 @@ def results(correct, points):
     user = User.query.get_or_404(current_user.id)
     assign_points(user.id, points)
 
+def process_answers(form):
+    user_answered = []
+    for i in form:
+        if i != "csrf_token":
+            if i != "submit":
+                user_answered.append(form[i])
+    return user_answered
+
 @app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
 @login_required
 def cyberbullying():
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
+
     form = QuestionForm()
     activity = Activity.query.filter_by(name="Cyberbullying Notes").first()
-    notes_questions = Question.query.filter_by(activity_id=activity.id)
+    notes_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
     notes_questions = shuffle(notes_questions)
-    set_answers(form, notes_questions)
-    if form.validate_on_submit():
-        correct = 0
-        for question, answer in zip(form, notes_questions):
-            print(question.data)
-            if question != "csrf_token":
-                if question != "submit":
-                    print(question.label + " | " + answer.title)
-                    if question.data == answer.answer:
-                        print("TRUE")
-                        correct += 1
-        results(correct, int(correct*10))
+    notes_questions, notes_answers = set_answers(form, notes_questions)
 
-    return render_template('primary_school/cyberbullying.html', notes=notes, form=form, notes_questions=notes_questions)
+    return render_template('primary_school/cyberbullying.html', notes=notes, form=form, notes_questions=notes_questions, notes_answers=notes_answers)
 
 @app.route("/check_answers/", methods=['POST'])
 def check_answers():
-    activity = Activity.query.filter_by(name="Cyberbullying Notes").first()
-    notes_questions = Question.query.filter_by(activity_id=activity.id)
     correct = 0
     form = request.form
-    print(form)
-    for question in form:
-        if question != "csrf_token":
-            if question != "submit":
-                user_answer = form[question]
-                print("Here: " + str(type(form[question])))
-    #            if user_answer == answer.answer:
-    #                correct += 1
-    #print(correct)
-    #if request.form.q1.data == answers[questions[0]][0]:
-       # correct += 1
-    #return redirect(url_for('primary_school'))
+    answers = request.args.getlist('answers', type=int)
+    user_answered = process_answers(form)
+    for i, j in zip(user_answered, answers):
+        if int(i) == int(j):
+            correct += 1
+    results(correct, int(correct*10))
+    return redirect(url_for('primary_school'))
 
 @app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
 @login_required

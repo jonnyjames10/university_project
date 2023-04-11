@@ -18,16 +18,23 @@
                 <pre>{{ notes }}</pre>
                 <hr>
                 <h3>Questions</h3>
-                <form method="POST" enctype="multipart/form-data">
+                {% for i in notes_answers %}
+                    <p>{{i}}</p>
+                {% endfor %}
+                <form action="{{ url_for('check_answers', answers=notes_answers) | safe }}" method="POST">
                     {{ form.csrf_token }}
 
-                    {% for field in form %}
-                        {% if field.type == "RadioField" %}
-                            <p>{{ field.label }}</p>
-                            {{ field }}
-                        {% endif %}
-                    {% endfor %}
-
+                    <p>{{ form.q1.label }}</p>
+                    {{ form.q1 }}
+                    <p>{{ form.q2.label }}</p>
+                    {{ form.q2 }}
+                    <p>{{ form.q3.label }}</p>
+                    {{ form.q3 }}
+                    <p>{{ form.q4.label }}</p>
+                    {{ form.q4 }}
+                    <p>{{ form.q5.label }}</p>
+                    {{ form.q5 }}
+                    {{ form.dbPoints(class_="input", id="dbPoints", type="hidden", value="0", placeholder=" ") }}
                     {{ form.submit }}
                 </form>
             </div>
