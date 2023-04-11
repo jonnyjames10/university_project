@@ -1,7 +1,7 @@
 from flask import render_template, url_for, request, redirect, flash, session
 from education import app, db, mail
 from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult, ActivityType, Question
-from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
@@ -69,6 +69,7 @@ def register():
         flash('Check your inbox to verify your email (Check your spam folder)')
         login_user(user)
         return redirect(url_for('home'))
+    form.first_name.data = "Name here"
     return render_template('register.html', title='Register',
         form=form)
 
@@ -129,6 +130,32 @@ def logout():
 def profile():
     user = User.query.get_or_404(current_user.id)
     return render_template('profile.html', user=user)
+
+@app.route("/edit_profile", methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm()
+    user = User.query.get_or_404(current_user.id)
+    if form.validate_on_submit():
+        print("HERE")
+        if form.email.data != user.email:
+            confirmation_token = generate_confirmation_token(user.id)
+            send_mail(form.email.data, 'Confirm your email', '/mail/test', user=user, token=confirmation_token)
+            flash('Check your inbox to verify your email (Check your spam folder)')
+        user.first_name = form.first_name.data
+        user.last_name=form.last_name.data
+        user.email=form.email.data
+        user.school = form.school.data
+        user.date_of_birth = form.date_of_birth.data
+        db.session.commit()
+        flash("Details changed succesfully!")
+        return redirect(url_for('profile'))
+    form.first_name.data = user.first_name
+    form.last_name.data = user.last_name
+    form.email.data = user.email
+    form.school.data = user.school
+    form.date_of_birth.data = user.date_of_birth
+    return render_template('edit_profile.html', form=form)
 
 def assign_points(user_id, points):
     user = User.query.get_or_404(user_id)

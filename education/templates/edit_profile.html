@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Edit Profile</h1>
+    <h3>Enter your new details and press save</h3>
+    <p style="text-align: center;">If a new email is entered, a new verification email will be sent to the email</p>
+    <br>
+
+    <form method="POST" action="">
+        {{ form.csrf_token }}
+        
+        <p>{{ form.first_name.label }}: {{ form.first_name }}</p>
+        {% for error in form.first_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p>{{ form.last_name.label }}: {{ form.last_name }}</p>
+        {% for error in form.last_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p>{{ form.email.label }}: {{ form.email }}</p>
+        {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p>{{ form.school.label }}: {{ form.school }}</p>
+        {% for error in form.school.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p>{{ form.date_of_birth.label }}: {{ form.date_of_birth }}</p>
+        {% for error in form.date_of_birth.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+
+        {{ form.submit }}
+    </form>
+
+{% endblock %}

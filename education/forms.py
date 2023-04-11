@@ -35,6 +35,18 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('Login')
 
+class EditProfileForm(FlaskForm):
+    first_name = StringField('First Name', validators = [DataRequired()])
+    last_name = StringField('Last Name', validators = [DataRequired()])
+    email = StringField('Email',validators=[DataRequired(),Email(message='Must be a valid email')])
+    school = StringField('School Name', validators=[DataRequired()])
+    date_of_birth = DateField('Date of Birth', validators=[DataRequired()])
+    submit = SubmitField('Save Details')
+        
+    def validate_date_of_birth(self, date_of_birth):
+        if date.today() <= date_of_birth.data:
+            raise ValidationError('Date of birth must be before todays date.')
+
 class PointsForm(FlaskForm):
     dbPoints = HiddenField('dbPoints', validators = [DataRequired()])
     marks = HiddenField('Marks', validators=[DataRequired()])
