@@ -2,26 +2,58 @@
 {% block content %}
     <h1>Homework</h1>
     {% for hw in complete_hw %}
-        {% if hw %}
-            <div class="hw_list">
-                <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
-                <div class="navbar_item">
-                    {% if hw[0].id in completed_id %}
-                        <form action="#">
-                            <button class="profile" style="width: 25vw; background-color: green; text-transform: uppercase;">Completed</button>
-                        </form>
-                    {% elif hw[0].id not in completed_hw_id and hw[0].due_date.date() <= date_tmrw %}
-                        <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
-                            <button class="profile" style="width: 25vw; background-color: red; text-transform: uppercase;">Due Soon</button>
-                        </form>
-                    {% else %}
-                        <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
-                            <button class="profile" style="width: 25vw;">Complete Homework</button>
-                        </form>
-                    {% endif %}
-                </div>
+        {% if hw[0].id not in completed_id and hw[0].due_date.date() == date_tmrw %}
+        <div class="hw_list">
+            <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
+            <div class="navbar_item">
+                <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
+                    <button class="profile" style="width: 25vw; background-color: red; text-transform: uppercase;">Due Soon</button>
+                </form>
             </div>
-            <br>
+        </div>
+        <br>
+        {% endif %}
+    {% endfor %}
+    {% for hw in complete_hw %}
+        {% if hw[0].id not in completed_id and hw[0].due_date.date() > date_tmrw %}
+        <div class="hw_list">
+            <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
+            <div class="navbar_item">
+                <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
+                    <button class="profile" style="width: 25vw;">Complete Homework</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+    {% endfor %}
+    {% if completed_id %}
+        <hr><br>
+    {% endif %}
+    {% for hw in complete_hw %}
+        {% if hw[0].id not in completed_id and hw[0].due_date.date() < date_tmrw %}
+        <div class="hw_list">
+            <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
+            <div class="navbar_item">
+                <form action="{{ url_for('completing_homework', activity_id=hw[1].id, homework_id=hw[0].id) }}">
+                    <button class="profile" style="width: 25vw; background-color: gray; text-transform: uppercase;">Late Homework</button>
+                </form>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+    {% endfor %}
+    {% for hw in complete_hw %}
+        {% if hw[0].id in completed_id %}
+        <div class="hw_list">
+            <p>Title: {{ hw[0].title }} | Date due: {{ hw[0].due_date.date() }} |{% if hw[0].notes %} Notes: {{ hw[0].notes }} |{% endif %} Task: {{ hw[1].name }}</p>
+            <div class="navbar_item">
+                <form action="#">
+                    <button class="profile" style="width: 25vw; background-color: green; text-transform: uppercase;">Completed</button>
+                </form>
+            </div>
+        </div>
+        <br>
         {% endif %}
     {% endfor %}
 {% endblock %}

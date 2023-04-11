@@ -40,6 +40,8 @@
             <form method="POST", action="">
                 {{ form.csrf_token }}
                 {{ form.dbPoints(class_="input", id="dbPoints", type="hidden", value="0", placeholder=" ") }}
+                {{ form.marks(class_="input", id="marks", type="hidden", value="0", placeholder=" ") }}
+                {{ form.activity_id(class_="input", id="activity_id", type="hidden", value="", placeholder=" ") }}
                 <button id="home" type="text" class="submit">Finish</button>
             </form>
         </div>

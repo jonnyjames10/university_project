@@ -27,6 +27,7 @@ const optionD = document.getElementById("option-four-label");
 const closeBtn = document.getElementById("close")
 const homeBtn = document.getElementById("home")
 const dbPoints = document.getElementById("dbPoints")
+const marks = document.getElementById("marks")
 
 const questions = [
     {
@@ -142,7 +143,8 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
         let points = Math.round(30000 / timeTaken) * 3;
         totalPoints += points
         dbPoints.value = totalPoints
-        
+        marks.value = score
+                
         question.innerHTML = "Score: " + score;
         answers.style.display="none";
         title.innerHTML = "Correct!";

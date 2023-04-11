@@ -37,6 +37,8 @@ class LoginForm(FlaskForm):
 
 class PointsForm(FlaskForm):
     dbPoints = HiddenField('dbPoints', validators = [DataRequired()])
+    marks = HiddenField('Marks', validators=[DataRequired()])
+    activity_id = HiddenField('activityID', validators=[DataRequired()])
     submit = SubmitField('Finish')
 
 class NewClassForm(FlaskForm):
