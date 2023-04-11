@@ -10,6 +10,7 @@ from flask_session import Session
 import datetime
 from datetime import datetime, timedelta
 import random
+from sqlalchemy import desc
 from sqlalchemy.sql.expression import func
 
 @app.before_request
@@ -137,7 +138,6 @@ def edit_profile():
     form = EditProfileForm()
     user = User.query.get_or_404(current_user.id)
     if form.validate_on_submit():
-        print("HERE")
         if form.email.data != user.email:
             confirmation_token = generate_confirmation_token(user.id)
             send_mail(form.email.data, 'Confirm your email', '/mail/test', user=user, token=confirmation_token)
@@ -283,12 +283,15 @@ def teacher_home():
 @app.route("/view_class/<int:class_id>")
 @login_required
 def view_class(class_id):
+    query = db.session.query(Homework)
     t_class = TeachingClass.query.get_or_404(class_id)
     if current_user.id != t_class.teacher_user:
         flash("You must be the teacher of this class to access this page")
         return redirect(url_for('home'))
     students = User.query.filter(User.classes.any(id=class_id)).all()
-    homeworks = t_class.homeworks
+    query = query.order_by(Homework.due_date.desc())
+    query = query.filter(Homework.class_id == t_class.id)
+    homeworks = query
     return render_template('view_class.html', t_class=t_class, students=students, homeworks=homeworks)
     
 @app.route("/new_class", methods=['GET', 'POST'])
