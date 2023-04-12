@@ -8,8 +8,15 @@
 import Ball from './Ball.js';
 import Paddle from './Paddle.js';
 
+let SPEED = .01
+
+export { SPEED }
+
 const ball = new Ball(document.getElementById("ball"));
 const playerPaddle = new Paddle(document.getElementById("player-paddle"));
+const playerPaddleCSS = document.querySelector(".playerPaddle")
+const computerPaddleCSS = document.querySelector(".computerPaddle")
+const ballCSS = document.querySelector(".ball")
 const computerPaddle = new Paddle(document.getElementById("computer-paddle"));
 const playerScoreElem = document.getElementById("player-score");
 const computerScoreElem = document.getElementById("computer-score");
@@ -57,8 +64,10 @@ const questions = [
 ];
 
 const advantages = [
-    'paddle', 'ballSpeed', 'paddleSpeed'
+    'pPaddleSize', 'paddleSpeed', 'ballSize', 'cPaddleSize'
 ];
+
+//, 'paddleSpeed', 'ballSize'
 
 // Game variables
 let lastTime;
@@ -136,6 +145,18 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
     const currentQuestion = shuffledQuestions[questionNumber];
     const currentQuestionAnswer = currentQuestion.correctOption;
 
+    // Reset advanatge for next round
+    if (playerPaddleCSS.style.height != "10vh") {
+        playerPaddleCSS.style.height = "10vh";
+    } else if (SPEED == 0.005) {
+        SPEED = 0.01
+    } else if (ballCSS.style.width == "4vh") {
+        ballCSS.style.width = "2vh";
+        ballCSS.style.height = "2vh";
+    } else if (computerPaddleCSS.style.height != "10vh") {
+        computerPaddleCSS.style.height = "10vh";
+    }
+
     const answer = getSelected();
     if (answer === currentQuestionAnswer) {
         score++;
@@ -144,11 +165,25 @@ document.getElementById('submitBtn').onclick = function checkAnswer() {
         totalPoints += points
         dbPoints.value = totalPoints
         marks.value = score
-                
+
         question.innerHTML = "Score: " + score;
         answers.style.display="none";
         title.innerHTML = "Correct!";
         countdown.style.display = "none";
+
+        // Pick an advantage
+        let adv = advantages[Math.floor(Math.random()*advantages.length)];
+        console.log(adv);
+        if (adv == 'pPaddleSize') {
+            playerPaddleCSS.style.height = "20vh";
+        } else if (adv == 'ballSize') {
+            ballCSS.style.width = "4vh";
+            ballCSS.style.height = "4vh";
+        } else if (adv == 'paddleSpeed') {
+            SPEED = 0.005
+        } else if (adv == 'cPaddleSize') {
+            computerPaddleCSS.style.height = "7vh";
+        }
     } else {
         let ans;
         for (let i=0; i < answers.length; i++) {

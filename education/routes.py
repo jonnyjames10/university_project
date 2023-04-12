@@ -238,8 +238,6 @@ def check_answers():
 def cyberbullying_pong():
     form = PointsForm()
     form.activity_id.data = 3
-    print(type(form.activity_id.data))
-    print(type(session['activity_id']))
     user = User.query.get_or_404(current_user.id)
     if form.validate_on_submit():
         results(form.marks.data, int(form.dbPoints.data))

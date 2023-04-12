@@ -15,7 +15,7 @@ body {
     overflow: hidden;
 }
 
-.paddle {
+.playerPaddle {
     --position: 50;
 
     position: absolute;
@@ -26,11 +26,22 @@ body {
     height: 10vh;
 }
 
-.paddle.left {
+.computerPaddle {
+    --position: 50;
+
+    position: absolute;
+    background-color: var(--foreground-color);
+    top: calc(var(--position) * 1vh);
+    transform: translateY(-50%);
+    width: 1vh;
+    height: 10vh;
+}
+
+.playerPaddle.left {
     left: 1vw;
 }
 
-.paddle.right {
+.computerPaddle.right {
     right: 1vw;
 }
 

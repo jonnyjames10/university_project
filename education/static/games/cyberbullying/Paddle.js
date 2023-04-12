@@ -1,4 +1,4 @@
-const SPEED = .01
+import { SPEED } from './script.js';
 
 export default class Paddle {
     constructor(paddleElem) {
