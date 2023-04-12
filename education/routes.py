@@ -62,15 +62,13 @@ def register():
             last_name = form.last_name.data, email = form.email.data,
             password = form.password.data, date_of_birth = form.date_of_birth.data,
             school = form.school.data, points = '0', role=[student_role])
-        confirmation_token = generate_confirmation_token(user.id)
-        send_mail(user.email, 'Confirm your email', '/mail/test', user=user, token=confirmation_token)
         db.session.add(user)
         db.session.commit()
         flash('Registration succesful!')
         flash('Check your inbox to verify your email (Check your spam folder)')
         login_user(user)
+        resend_confirmation_email()
         return redirect(url_for('home'))
-    form.first_name.data = "Name here"
     return render_template('register.html', title='Register',
         form=form)
 
@@ -115,6 +113,8 @@ def login():
             login_user(user)
             session['homework'] = False
             return redirect(url_for('home'))
+        elif user is not None:
+            flash("Please re-enter your password")
     return render_template('login.html', title='Login', form=form)
 
 @app.route("/logout")
