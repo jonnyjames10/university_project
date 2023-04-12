@@ -225,12 +225,16 @@ def cyberbullying():
 def check_answers():
     correct = 0
     form = request.form
+    print(form)
     answers = request.args.getlist('answers', type=int)
     activity_id = request.args.get('activity_id', type=int)
     user_answered = process_answers(form)
     for i, j in zip(user_answered, answers):
         if int(i) == int(j):
             correct += 1
+    results(correct, int(correct*10))
+    if session['homework'] == True and session['activity_id'] == activity_id:
+        end_homework(int(correct), current_user.id)
     return redirect(url_for('primary_school'))
 
 @app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
