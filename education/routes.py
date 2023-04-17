@@ -17,15 +17,15 @@ from sqlalchemy.sql.expression import func
 def before_request():
     # If user is logged in but hasn't verified their email
     if current_user.is_authenticated and not current_user.authenticated and \
-        request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
+        request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'homework', 'completing_homework']:
         flash("Please verify your email first")
         return redirect(url_for('unconfirmed'))
     # If user is not logged in
-    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'teacher_home']:
+    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'homework', 'completing_homework']:
         flash("You must be logged in to view this page")
         return redirect(url_for('login'))
     # If user is logged in and doesn't have the 'teacher' role
-    if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework']:
+    if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework', 'view_homework']:
         flash("You must be a teacher to view this page")
         return redirect(url_for('home'))
     # If user is not authenticated or have the 'admin' user and tries to access admin pages
