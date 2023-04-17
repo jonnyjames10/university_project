@@ -140,6 +140,7 @@ def edit_profile():
     if form.validate_on_submit():
         if form.email.data != user.email:
             confirmation_token = generate_confirmation_token(user.id)
+            user.authenticated = 0
             send_mail(form.email.data, 'Confirm your email', '/mail/test', user=user, token=confirmation_token)
             flash('Check your inbox to verify your email (Check your spam folder)')
         user.first_name = form.first_name.data
