@@ -22,6 +22,10 @@ p {
 pre {
     font-family: "SoDo Sans SemiBold", Helvetica Neue, Helvetica,
         Arial, sans-serif;
+    display: block;
+    padding: 9.5px;
+    overflow: initial!important;
+    white-space: pre-line;
 }
 
 td {

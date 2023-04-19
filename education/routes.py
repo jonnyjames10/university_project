@@ -190,8 +190,7 @@ def set_answers(form, questions):
         field.id = question.id
         random.shuffle(field.choices)
         field.label = question.title
-        answers.append(int(question.answer))
-    print(answers)
+        answers.append(question.answer)
     return questions, answers
 
 def results(correct, points):
@@ -226,12 +225,11 @@ def cyberbullying():
 def check_answers():
     correct = 0
     form = request.form
-    print(form)
-    answers = request.args.getlist('answers', type=int)
+    answers = request.args.getlist('answers')
     activity_id = request.args.get('activity_id', type=int)
     user_answered = process_answers(form)
     for i, j in zip(user_answered, answers):
-        if int(i) == int(j):
+        if i == j:
             correct += 1
     results(correct, int(correct*10))
     if session['homework'] == True and session['activity_id'] == activity_id:
@@ -247,7 +245,6 @@ def cyberbullying_pong():
     if form.validate_on_submit():
         results(form.marks.data, int(form.dbPoints.data))
         if session['homework'] == True and session['activity_id'] == form.activity_id.data:
-            print("PASSED")
             end_homework(int(form.marks.data), current_user.id)
         return redirect(url_for('cyberbullying'))
     return render_template('primary_school/games/pong.html', form=form, user=user)
@@ -321,7 +318,6 @@ def set_homework(class_id):
     form = SetHomeworkForm()
     form.activities.choices = [(activity.id, activity.name) for activity in Activity.query.all()]
     if form.validate_on_submit():
-        print(form.activities.data)
         homework = Homework(title=form.title.data, due_date = form.due_date.data, notes = form.notes.data, class_id = class_id, activity_id = form.activities.data)
         db.session.add(homework)
         db.session.commit()
@@ -333,15 +329,11 @@ def homework_helper(classes):
     homework_obj = []
     for cl in classes:
         homework_obj.append(cl.homeworks) # Add homework objects from class to list
-    print(homework_obj)
     homeworks = []
     for h in homework_obj:
         if h:
-            print(h)
             for hw in h:
-                print(hw)
                 homeworks.append(Homework.query.get(hw.id)) # Add homeworks from the object to a list
-    print(homeworks)
     activities = []
     for hw in homeworks:
         if hw:
@@ -360,7 +352,6 @@ def homework_helper(classes):
 def homework():
     user = User.query.get_or_404(current_user.id) #User ID
     classes = user.classes #Get user's classes
-    print(classes)
     complete_hw = homework_helper(classes)
     hw_completed = []
     completed_id = []
