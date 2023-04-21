@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>{{ activity.name }}</h1>
+    <form action="{{ url_for('check_answers', answers=answers, activity_id=activity_id) | safe }}" method="POST">
+        {{ form.csrf_token }}
+
+        <p>{{ form.q1.label }}</p>
+        {{ form.q1 }}
+        <p>{{ form.q2.label }}</p>
+        {{ form.q2 }}
+        <p>{{ form.q3.label }}</p>
+        {{ form.q3 }}
+        <p>{{ form.q4.label }}</p>
+        {{ form.q4 }}
+        <p>{{ form.q5.label }}</p>
+        {{ form.q5 }}
+        <p>{{ form.q6.label }}</p>
+        {{ form.q6 }}
+        <p>{{ form.q7.label }}</p>
+        {{ form.q7 }}
+        <p>{{ form.q8.label }}</p>
+        {{ form.q8 }}
+        {{ form.submit }}
+    </form>
+{% endblock %}

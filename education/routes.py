@@ -1,7 +1,7 @@
 from flask import render_template, url_for, request, redirect, flash, session
 from education import app, db, mail
 from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult, ActivityType, Question
-from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm, VideoForm
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm, VideoForm, TestForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
@@ -206,6 +206,16 @@ def process_answers(form):
             if i != "submit":
                 user_answered.append(form[i])
     return user_answered
+
+@app.route("/test/<int:activity_id>")
+@login_required
+def test(activity_id):
+    form = TestForm()
+    activity = Activity.query.filter_by(id=activity_id).first()
+    # questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
+    # questions = shuffle(questions)
+    # questions, answers = set_answers(form, questions)
+    return render_template('test.html', activity=activity, form=form)
 
 @app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
 @login_required
