@@ -1,7 +1,7 @@
 from flask import render_template, url_for, request, redirect, flash, session
 from education import app, db, mail
 from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult, ActivityType, Question
-from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm
+from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm, VideoForm
 from education.email import send_mail
 from education.authentication import generate_confirmation_token, verify_confirmation_token
 from flask_login import login_user, logout_user, login_required, current_user
@@ -213,13 +213,20 @@ def cyberbullying():
     with open("education/static/notes/cyberbullying.txt", "r") as text:
         notes = text.read()
 
-    form = QuestionForm()
+    notes_form = QuestionForm()
+    video_form = VideoForm()
     activity = Activity.query.filter_by(name="Cyberbullying Notes").first()
+    # video = Activity.query.filter_by(name="Cyberbullying Video").first()
     notes_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
+    # video_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
     notes_questions = shuffle(notes_questions)
-    notes_questions, notes_answers = set_answers(form, notes_questions)
+    # video_questions = shuffle(video_questions)
+    notes_questions, notes_answers = set_answers(notes_form, notes_questions)
+    # video_questions, video_answers = set_answers(video_form, video_questions)
 
-    return render_template('primary_school/cyberbullying.html', notes=notes, form=form, notes_questions=notes_questions, notes_answers=notes_answers)
+    return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers)
+    # return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers, 
+    # video_form=video_form, video_questions=video_questions, video_answers=video_answers)
 
 @app.route("/check_answers/", methods=['POST'])
 def check_answers():

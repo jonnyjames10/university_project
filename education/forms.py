@@ -76,3 +76,22 @@ class QuestionForm(FlaskForm):
     q4 = RadioField('', choices=[], validators=[DataRequired()])
     q5 = RadioField('', choices=[], validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class VideoForm(FlaskForm):
+    q1 = RadioField('', choices=[], validators=[DataRequired()])
+    q2 = RadioField('', choices=[], validators=[DataRequired()])
+    q3 = RadioField('', choices=[], validators=[DataRequired()])
+    q4 = RadioField('', choices=[], validators=[DataRequired()])
+    q5 = RadioField('', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+class TestForm(FlaskForm):
+    q1 = RadioField('', choices=[], validators=[DataRequired()])
+    q2 = RadioField('', choices=[], validators=[DataRequired()])
+    q3 = RadioField('', choices=[], validators=[DataRequired()])
+    q4 = RadioField('', choices=[], validators=[DataRequired()])
+    q5 = RadioField('', choices=[], validators=[DataRequired()])
+    q6 = RadioField('', choices=[], validators=[DataRequired()])
+    q7 = RadioField('', choices=[], validators=[DataRequired()])
+    q8 = RadioField('', choices=[], validators=[DataRequired()])
+    submit = SubmitField('Submit')
