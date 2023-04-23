@@ -35,6 +35,11 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password',validators=[DataRequired()])
     submit = SubmitField('Login')
 
+    def validate_email(self,email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('Email address is not recognised. If you have not created an account, register one to continue')
+
 class EditProfileForm(FlaskForm):
     first_name = StringField('First Name', validators = [DataRequired()])
     last_name = StringField('Last Name', validators = [DataRequired()])

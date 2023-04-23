@@ -10,11 +10,20 @@
             {{ form.email(class_="input", placeholder=" ") }}
             <div class="cut" style="width:51px"></div>
             {{ form.email.label(class_="placeholder") }}
+
+            {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
         </div>
         <div class="input-container ic2">
             {{ form.password(class_="input", placeholder=" ") }}
             <div class="cut" style="width:72px"></div>
             {{ form.password.label(class_="placeholder") }}
+            {% for error in form.password.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            <br>
         </div>
         <button type="text" class="submit">Log In</button>
     </form>

@@ -210,8 +210,10 @@ def process_answers(form):
 @app.route("/test/<int:activity_id>")
 @login_required
 def test(activity_id):
-    form = TestForm()
     activity = Activity.query.filter_by(id=activity_id).first()
+    if activity.activity_type_id != 4:
+        return redirect(url_for('home'))
+    form = TestForm()
     # questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
     # questions = shuffle(questions)
     # questions, answers = set_answers(form, questions)
@@ -326,7 +328,7 @@ def new_class():
             user = User.query.get_or_404(form.students.data[i])
             user.classes.append(class_add)
             db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('view_class', class_id=class_add.id))
     return render_template('new_class.html', pupils=pupils, form=form)
     
 @app.route("/set_homework/<int:class_id>", methods=['GET', 'POST'])
