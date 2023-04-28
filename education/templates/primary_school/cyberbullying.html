@@ -44,19 +44,19 @@
                 <h3>Questions</h3>
                 <!-- Change this form to the video questions -->
                 <form action="{{ url_for('check_answers', answers=notes_answers, activity_id='1') | safe }}" method="POST">
-                    {{ notes_form.csrf_token }}
+                    {{ video_form.csrf_token }}
 
-                    <p>{{ notes_form.q1.label }}</p>
-                    {{ notes_form.q1 }}
-                    <p>{{ notes_form.q2.label }}</p>
-                    {{ notes_form.q2 }}
-                    <p>{{ notes_form.q3.label }}</p>
-                    {{ notes_form.q3 }}
-                    <p>{{ notes_form.q4.label }}</p>
-                    {{ notes_form.q4 }}
-                    <p>{{ notes_form.q5.label }}</p>
-                    {{ notes_form.q5 }}
-                    {{ notes_form.submit }}
+                    <p>{{ video_form.q1.label }}</p>
+                    {{ video_form.q1 }}
+                    <p>{{ video_form.q2.label }}</p>
+                    {{ video_form.q2 }}
+                    <p>{{ video_form.q3.label }}</p>
+                    {{ video_form.q3 }}
+                    <p>{{ video_form.q4.label }}</p>
+                    {{ video_form.q4 }}
+                    <p>{{ video_form.q5.label }}</p>
+                    {{ video_form.q5 }}
+                    {{ video_form.submit }}
                 </form>
             </div>
             <div id="game" class="content_inside">

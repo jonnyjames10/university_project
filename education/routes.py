@@ -230,17 +230,16 @@ def cyberbullying():
     notes_form = QuestionForm()
     video_form = VideoForm()
     activity = Activity.query.filter_by(name="Cyberbullying Notes").first()
-    # video = Activity.query.filter_by(name="Cyberbullying Video").first()
+    video = Activity.query.filter_by(name="Cyberbullying Video").first()
     notes_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
-    # video_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
+    video_questions = Question.query.filter_by(activity_id=video.id).order_by(func.rand()).limit(5).all()
     notes_questions = shuffle(notes_questions)
-    # video_questions = shuffle(video_questions)
+    video_questions = shuffle(video_questions)
     notes_questions, notes_answers = set_answers(notes_form, notes_questions)
-    # video_questions, video_answers = set_answers(video_form, video_questions)
+    video_questions, video_answers = set_answers(video_form, video_questions)
 
-    return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers)
-    # return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers, 
-    # video_form=video_form, video_questions=video_questions, video_answers=video_answers)
+    return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers, 
+                           video_form=video_form, video_questions=video_questions, video_answers=video_answers)
 
 @app.route("/check_answers/", methods=['POST'])
 def check_answers():
