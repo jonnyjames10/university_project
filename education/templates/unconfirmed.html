@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1> To access this feature you must first confirm your email account! </h1>
+    <h1> To access this feature you must first confirm your email address! </h1>
 
     <p style="text-align: center;">You have received a confirmation link during the registration process. If you need a new link click on the link below:</p>
 
-    <p style="text-align: center; background-color: white;"><a href="{{ url_for('resend_confirmation_email') }}">Send new confirmation email</a></p>
+    <form action="{{ url_for('resend_confirmation_email') }}">
+        <button class="register">Send new confirmation email</button>
+    </form>
 {% endblock %}

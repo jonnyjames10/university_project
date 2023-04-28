@@ -21,11 +21,13 @@ def before_request():
         flash("Please verify your email first")
         return redirect(url_for('unconfirmed'))
     # If user is not logged in
-    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'homework', 'completing_homework']:
+    if not current_user.is_authenticated and request.endpoint in ['cyberbullying', 'phishing', 'suspicious_links', 'databases', 'profile', 'homework', 
+                                                                  'completing_homework']:
         flash("You must be logged in to view this page")
         return redirect(url_for('login'))
     # If user is logged in and doesn't have the 'teacher' role
-    if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework', 'view_homework']:
+    if current_user.is_authenticated and "teacher" not in current_user.role and request.endpoint in ['teacher_home', 'view_class', 'new_class', 'set_homework', 
+                                                                                                     'view_homework']:
         flash("You must be a teacher to view this page")
         return redirect(url_for('home'))
     # If user is not authenticated or have the 'admin' user and tries to access admin pages
@@ -101,7 +103,7 @@ def resend_confirmation_email():
         return redirect(url_for('home'))
     token = generate_confirmation_token(current_user.id)
     flash("A new confirmation link has been sent to your email")
-    send_mail(current_user.email, 'Confirm your account', '/mail/test', user=current_user, token=token)
+    send_mail(current_user.email, 'Confirm your account', '/mail/verify', user=current_user, token=token)
     return redirect(url_for('unconfirmed'))
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -246,6 +248,7 @@ def check_answers():
     form = request.form
     answers = request.args.getlist('answers')
     activity_id = request.args.get('activity_id', type=int)
+    activity = Activity.query.get(activity_id)
     user_answered = process_answers(form)
     for i, j in zip(user_answered, answers):
         if i == j:
@@ -253,7 +256,7 @@ def check_answers():
     results(correct, int(correct*10))
     if session['homework'] == True and session['activity_id'] == activity_id:
         end_homework(int(correct), current_user.id)
-    return redirect(url_for('primary_school'))
+    return redirect(url_for(activity.url_link))
 
 @app.route("/primary_school/cyberbullying/pong", methods=['GET', 'POST'])
 @login_required
@@ -341,7 +344,7 @@ def set_homework(class_id):
         db.session.add(homework)
         db.session.commit()
         flash("Homework set successfully!")
-        return redirect(url_for('home'))
+        return redirect(url_for('view_class', class_id=class_id))
     return render_template('set_homework.html', form=form)
 
 def homework_helper(classes):

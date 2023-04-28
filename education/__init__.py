@@ -30,9 +30,7 @@ class UserView(ModelView):
     column_details_list = [
         'first_name', 'last_name', 'email', 'school', 'points', 'role'
     ]
-    form_columns = [
-        'first_name', 'last_name', 'email', 'school', 'points', 'role',
-    ]
+    
 
 from flask_admin import Admin
 from education.views import AdminView
