@@ -1,5 +1,5 @@
 from flask import render_template, url_for, request, redirect, flash, session
-from education import app, db, mail
+from education import app, db, mail, cipher
 from education.models import User, Role, TeachingClass, Activity, Homework, HomeworkResult, ActivityType, Question
 from education.forms import RegistrationForm, LoginForm, PointsForm, NewClassForm, SetHomeworkForm, QuestionForm, EditProfileForm, VideoForm, TestForm
 from education.email import send_mail
@@ -10,7 +10,7 @@ from flask_session import Session
 import datetime
 from datetime import datetime, timedelta
 import random
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 from sqlalchemy.sql.expression import func
 
 @app.before_request
@@ -209,16 +209,16 @@ def process_answers(form):
                 user_answered.append(form[i])
     return user_answered
 
-@app.route("/test/<int:activity_id>")
+@app.route("/test/<url_link>")
 @login_required
-def test(activity_id):
-    activity = Activity.query.filter_by(id=activity_id).first()
-    if activity.activity_type_id != 4:
-        return redirect(url_for('home'))
+def test(url_link):
+    activity = Activity.query.filter_by(url_link=url_link).filter_by(activity_type_id=4).first()
+    notes = Activity.query.filter_by(url_link=url_link).filter_by(activity_type_id=1).first()
+    video = Activity.query.filter_by(url_link=url_link).filter_by(activity_type_id=2).first()
     form = TestForm()
-    # questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
-    # questions = shuffle(questions)
-    # questions, answers = set_answers(form, questions)
+    questions = Question.query.filter(or_(Question.activity_id==notes.id, Question.activity_id==video.id)).order_by(func.rand()).limit(8).all()
+    questions = shuffle(questions)
+    questions, answers = set_answers(form, questions)
     return render_template('test.html', activity=activity, form=form)
 
 @app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
@@ -231,6 +231,8 @@ def cyberbullying():
     video_form = VideoForm()
     activity = Activity.query.filter_by(name="Cyberbullying Notes").first()
     video = Activity.query.filter_by(name="Cyberbullying Video").first()
+    global notes_answers
+    global video_answers
     notes_questions = Question.query.filter_by(activity_id=activity.id).order_by(func.rand()).limit(5).all()
     video_questions = Question.query.filter_by(activity_id=video.id).order_by(func.rand()).limit(5).all()
     notes_questions = shuffle(notes_questions)
@@ -238,15 +240,19 @@ def cyberbullying():
     notes_questions, notes_answers = set_answers(notes_form, notes_questions)
     video_questions, video_answers = set_answers(video_form, video_questions)
 
-    return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, notes_answers=notes_answers, 
-                           video_form=video_form, video_questions=video_questions, video_answers=video_answers)
+    return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, 
+                           video_form=video_form, video_questions=video_questions, url_link=activity.url_link)
 
 @app.route("/check_answers/", methods=['POST'])
 def check_answers():
     correct = 0
     form = request.form
-    answers = request.args.getlist('answers')
-    activity_id = request.args.get('activity_id', type=int)
+    #answers = request.args.getlist('answers')
+    activity_id = request.args.get('activity_type_id', type=int)
+    if activity_id == 1:
+        answers = notes_answers
+    if activity_id == 2:
+        answers = video_answers
     activity = Activity.query.get(activity_id)
     user_answered = process_answers(form)
     for i, j in zip(user_answered, answers):

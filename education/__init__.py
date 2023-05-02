@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_admin.contrib.sqla import ModelView
 from flask_mail import Mail
+from flask_simple_crypt import SimpleCrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '29080ff5cc25442bfe816387f7ffd9a54d2bded330d9f9b7'
@@ -17,6 +18,9 @@ app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
 db = SQLAlchemy(app)
+
+cipher = SimpleCrypt()
+cipher.init_app(app)
 
 login_manager = LoginManager()
 login_manager.session_protection = "strong"
