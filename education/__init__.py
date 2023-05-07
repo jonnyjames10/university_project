@@ -38,7 +38,7 @@ class UserView(ModelView):
 
 from flask_admin import Admin
 from education.views import AdminView
-from education.models import User, Role, TeachingClass, Homework, HomeworkResult, Activity, ActivityType, Level
+from education.models import User, Role, TeachingClass, Homework, HomeworkResult, Activity, ActivityType, Level, Question
 admin = Admin(app, name='Admin panel', template_mode='bootstrap3')
 admin.add_view(UserView(User, db.session))
 admin.add_view(AdminView(Role, db.session))
@@ -48,5 +48,6 @@ admin.add_view(AdminView(HomeworkResult, db.session))
 admin.add_view(AdminView(Activity, db.session))
 admin.add_view(AdminView(ActivityType, db.session))
 admin.add_view(AdminView(Level, db.session))
+admin.add_view(AdminView(Question, db.session))
 
 from education import routes

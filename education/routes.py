@@ -218,7 +218,8 @@ def test(url_link):
     form = TestForm()
     questions = Question.query.filter(or_(Question.activity_id==notes.id, Question.activity_id==video.id)).order_by(func.rand()).limit(8).all()
     questions = shuffle(questions)
-    questions, answers = set_answers(form, questions)
+    global test_answers
+    questions, test_answers = set_answers(form, questions)
     return render_template('test.html', activity=activity, form=form)
 
 @app.route("/primary_school/cyberbullying", methods=['POST', 'GET'])
@@ -243,22 +244,30 @@ def cyberbullying():
     return render_template('primary_school/cyberbullying.html', notes=notes, notes_form=notes_form, notes_questions=notes_questions, 
                            video_form=video_form, video_questions=video_questions, url_link=activity.url_link)
 
-@app.route("/check_answers/", methods=['POST'])
+@app.route("/check_answers", methods=['POST'])
 def check_answers():
     correct = 0
     form = request.form
     #answers = request.args.getlist('answers')
-    activity_id = request.args.get('activity_type_id', type=int)
-    if activity_id == 1:
+    activity_type_id = request.args.get('activity_type_id', type=int)
+    activity_id = request.args.get('activity_id', type=int)
+    if activity_type_id == 1:
         answers = notes_answers
-    if activity_id == 2:
+    elif activity_type_id == 2:
         answers = video_answers
+    elif activity_type_id == 4:
+        answers = test_answers
     activity = Activity.query.get(activity_id)
     user_answered = process_answers(form)
+    print(user_answered)
+    print(answers)
     for i, j in zip(user_answered, answers):
         if i == j:
             correct += 1
-    results(correct, int(correct*10))
+    if activity_type_id == 4:
+        results(correct, int(correct*20))
+    else:
+        results(correct, int(correct*10))
     if session['homework'] == True and session['activity_id'] == activity_id:
         end_homework(int(correct), current_user.id)
     return redirect(url_for(activity.url_link))

@@ -18,7 +18,7 @@
                 <pre>{{ notes }}</pre>
                 <hr>
                 <h3>Questions</h3>
-                <form action="{{ url_for('check_answers', activity_type_id='1') | safe }}" method="POST">
+                <form action="{{ url_for('check_answers', activity_id='1', activity_type_id='1') | safe }}" method="POST">
                     {{ notes_form.csrf_token }}
 
                     <p>{{ notes_form.q1.label }}</p>
@@ -37,13 +37,13 @@
             <div id="video" class="content_inside">
                 <h3>This section will hold a video with a demo or walkthrough of a task</h3>
                 <video controls>
-                    <source src={{ url_for('static', filename="videos/demo.mp4") }} type="video/mp4">
+                    <source src={{ url_for('static', filename="videos/cyberbullying_vid.mp4") }} type="video/mp4">
                 Your browser does not support the video tag.
                 </video>
                 <hr>
                 <h3>Questions</h3>
                 <!-- Change this form to the video questions -->
-                <form action="{{ url_for('check_answers', activity_id='2') | safe }}" method="POST">
+                <form action="{{ url_for('check_answers', activity_id='2', activity_type_id='2') | safe }}" method="POST">
                     {{ video_form.csrf_token }}
 
                     <p>{{ video_form.q1.label }}</p>
