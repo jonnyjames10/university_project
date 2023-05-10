@@ -5,6 +5,14 @@ from flask_admin.contrib.sqla import ModelView
 from flask_mail import Mail
 from flask_simple_crypt import SimpleCrypt
 
+# References:
+#   PalletsProjects. [No date] Flask (Version 2.3) [Code Library] https://flask.palletsprojects.com/en/2.3.x/
+#   SQLAlchemy. (2023) SQLAlchemy. (Version 2.0.11) [Code Library] https://www.sqlalchemy.org. 
+#   Countryman, M. (2022) Flask-Login (Version 0.6.2) [Code Library] https://flask-login.readthedocs.io/en/latest/
+#   Flask-Admin (2022) Flask-Admin (Version 1.6.0) [Code Library] https://flask-admin.readthedocs.io/en/latest/
+#   Wright, M. [No date] Flask-Mail [Code library] https://pythonhosted.org/Flask-Mail/
+#   furritos. (2022) Flask-Simple-Crypt (Version 0.3.3) [Code Library] https://pypi.org/project/Flask-Simple-Crypt/
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '29080ff5cc25442bfe816387f7ffd9a54d2bded330d9f9b7'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Piano2002@localhost/educationalportal'

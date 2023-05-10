@@ -13,6 +13,13 @@ import random
 from sqlalchemy import desc, or_
 from sqlalchemy.sql.expression import func
 
+# References:
+#   PalletsProjects. [No date] Flask (Version 2.3) [Code Library] https://flask.palletsprojects.com/en/2.3.x/
+#   Countryman, M. (2022) Flask-Login (Version 0.6.2) [Code Library] https://flask-login.readthedocs.io/en/latest/
+#   Python (2023) datetime (Version 3.11.3) [Code Library] https://docs.python.org/3/library/datetime.html
+#   Python. [No date]. random – Generate pseudo-random numbers. [Code Library]. https://docs.python.org/3/library/random.html/
+#   SQLAlchemy. (2023) SQLAlchemy. (Version 2.0.11) [Code Library] https://www.sqlalchemy.org. 
+
 @app.before_request
 def before_request():
     # If user is logged in but hasn't verified their email

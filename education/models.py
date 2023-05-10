@@ -4,6 +4,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_security import RoleMixin
 
+# References:
+#   Python (2023) datetime (Version 3.11.3) [Code Library] https://docs.python.org/3/library/datetime.html
+#   Werkzeug. [No date]. Utilities. (Version 2.3) [Code Library] https://werkzeug.palletsprojects.com/en/2.3.x/utils/
+#   Countryman, M. (2022) Flask-Login (Version 0.6.2) [Code Library] https://flask-login.readthedocs.io/en/latest/
+#   [No author] [No date] Flask_Security (Version 5.2) [Code Library] https://pythonhosted.org/Flask-Security/
+
 users_roles = db.Table(
     'users_roles',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),

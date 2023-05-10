@@ -5,6 +5,9 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from education.models import User
 from datetime import datetime, timedelta, date
 
+# References:
+#   WTForms. (2021) WTForms (Version 3.0.1) [Code Library] https://wtforms.readthedocs.io/en/3.0.x/
+
 class RegistrationForm(FlaskForm):
     first_name = StringField('First Name', validators = [DataRequired()])
     last_name = StringField('Last Name', validators = [DataRequired()])

@@ -15,6 +15,7 @@
         {% endif %}
         <div id="content">
             <div id="notes" class="content_inside">
+                <h3>Notes</h3>
                 <pre>{{ notes }}</pre>
                 <hr>
                 <h3>Questions</h3>
@@ -35,7 +36,7 @@
                 </form>
             </div>
             <div id="video" class="content_inside">
-                <h3>This section will hold a video with a demo or walkthrough of a task</h3>
+                <h3>Video</h3>
                 <video controls>
                     <source src={{ url_for('static', filename="videos/cyberbullying_vid.mp4") }} type="video/mp4">
                 Your browser does not support the video tag.
@@ -60,20 +61,18 @@
                 </form>
             </div>
             <div id="game" class="content_inside">
-                <h3>A JavaScript game will go here</h3>
-                <p>They will be asked questions, and given 50 points if they get it correct</p>
-                <p>The amount of time left to answer the question will used:</p>
-                <p>Points awarded = 50 * (time_left / total_time)</p>
+                <h3>Game</h3>
+                <p>Play a game and test your knowledge!</p>
+                <p>After a point has been played, you will be asked a question</p>
+                <p>If you get it correct, you will get an advantage to help you</p>
+                <p>The quicker you answer the question correct</p>
+                <p>Press the button below to start</p>
                 <p>Click on <a href="{{ url_for('cyberbullying_pong') }}">this link</a> to go to the game</p>
             </div>
             <div id="test" class="content_inside">
-                <h3>A test will go here</h3>
-                <p>Will be a larger version of the questions given in the text section</p>
-                <p>Will get a certain number of points given for each question</p>
-                <p>So total number of points will be multiplied by a value</p>
-                <p>(Total value to be decided)</p>
-                <p>Give more points for the test than compared to other activities as it is trickier</p>
-                <p>Click below to go to the test</p>
+                <h3>Test</h3>
+                <p>The test will contain a mix of questions from the notes and videos</p>
+                <p>Click below to begin the test</p>
                 <div class="navbar_item">
                     <form action="{{ url_for('test', url_link=url_link) }}">
                         <button class="profile">Start the test</button>
